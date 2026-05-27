@@ -1,0 +1,81 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #07080f;
+  --bg2:       #0e0f1a;
+  --bg3:       #151628;
+  --glass:     rgba(255,255,255,0.04);
+  --glass2:    rgba(255,255,255,0.08);
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --text:      #eeeeff;
+  --text2:     #8888aa;
+  --accent:    #7c6fff;
+  --accent2:   #a78bfa;
+  --glow:      rgba(124,111,255,0.3);
+
+  --happy:     #fbbf24;
+  --sad:       #60a5fa;
+  --angry:     #f87171;
+  --anxious:   #a78bfa;
+  --stressed:  #fb923c;
+  --neutral:   #6ee7b7;
+
+  --radius:    14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --font:      "Inter", system-ui, sans-serif;
+  --mono:      "JetBrains Mono", monospace;
+}
+
+html { font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animated gradient orbs in background */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+body::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(124,111,255,0.12), transparent 70%);
+  top: -100px; left: -100px;
+  animation: orbFloat 8s ease-in-out infinite;
+}
+body::after {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(244,114,182,0.08), transparent 70%);
+  bottom: -80px; right: -80px;
+  animation: orbFloat 10s ease-in-out infinite reverse;
+}
+
+#root { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; }
+
+button { font-family: var(--font); cursor: pointer; border: none; outline: none; transition: all 0.18s ease; }
+button:active { transform: scale(0.97); }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 99px; }
+
+@keyframes fadeIn    { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pop       { 0%{transform:scale(0.7);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes spin      { to { transform:rotate(360deg); } }
+@keyframes orbFloat  { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+@keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes moodPop   { 0%{transform:scale(0) rotate(-10deg);opacity:0} 60%{transform:scale(1.2) rotate(5deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+@keyframes waveIn    { from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0% 0 0)} }
+@keyframes shimmer   { 0%{background-position:-200% center} 100%{background-position:200% center} }
