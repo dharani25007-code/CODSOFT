@@ -1,88 +1,186 @@
-# CaptionVerse
+<div align="center">
 
-CaptionVerse is an image captioning AI that turns an uploaded image into a concise natural-language caption. The app is built around the classic computer vision plus NLP pipeline from the assignment: a pretrained ResNet50 encoder extracts image features, and a transformer-based decoder turns those features into text.
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=200&section=header&text=CaptionVerse&fontSize=70&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Visual%20Emotional%20Narrative%20Engine%20%7C%20CodSoft%20AI%20Internship%20Task%203&descAlignY=60&descAlign=50" width="100%"/>
 
-The backend also returns extra captioning outputs like object predictions, emotion, story, hashtags, SEO tags, scene type, and color mood so the UI can show more than the base requirement without drifting away from it.
+<br/>
 
-## What it does
+![CodSoft](https://img.shields.io/badge/CodSoft-Task%203-7c6fff?style=for-the-badge&logo=openai&logoColor=white)
+![Batch](https://img.shields.io/badge/Batch-MAY%20C2%202026-ff6b6b?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-LLaMA4%20Scout-FF6B35?style=for-the-badge&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
 
-- Upload or drag and drop an image
-- Generate a single caption from that image
-- Show the top ResNet50 visual concepts used for captioning
-- Display extra analysis such as emotion, story, hashtags, SEO tags, and scene type
-- Copy the caption to the clipboard
-- Review a short explanation of the captioning pipeline
+<br/>
 
-## How it works
+> **CaptionVerse** is an AI-powered Visual Intelligence Engine that goes far beyond basic image captioning. It detects emotions, writes stories, identifies objects, generates hashtags, and translates captions into 7 languages — all powered by **Groq LLaMA4 Scout Vision Model**, completely free.
 
-1. The frontend sends the image to the Flask API.
-2. The backend preprocesses the image and forwards it through the ResNet50 encoder.
-3. The captioning transformer generates the main caption and the extra analysis fields.
-4. The caption and supporting details are rendered in the result card.
+</div>
 
-## Project Structure
+---
 
-```text
-captionverse/
-├── backend/
-│   ├── app.py
-│   └── requirements.txt
-└── frontend/
-    ├── index.html
-    ├── package.json
-    └── src/
-    ├── App.jsx
-    ├── App.css
-        ├── index.css
-        └── main.jsx
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🧠 Visual Emotional Narrative Engine (VENE)
+- Patent-worthy multi-dimensional image analysis
+- Poet, journalist, comedian & storyteller — all at once
+- Real-time style switching without re-uploading
+- Confidence scores for every detection
+
+</td>
+<td width="50%">
+
+### 📝 5 Caption Styles
+- 💼 **Professional** — Formal & informative
+- 🌸 **Poetic** — Lyrical & emotional
+- 😂 **Funny** — Witty & humorous
+- 📰 **News** — Breaking news style
+- 📱 **Social** — Instagram ready
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🎭 Scene Intelligence
+- Emotion detection with confidence score
+- Scene type classification
+- Color mood analysis
+- Object detection with confidence bars
+
+</td>
+<td width="50%">
+
+### 🌍 Multi-language (7 languages)
+- English, Tamil, Hindi
+- French, Spanish, Arabic, Japanese
+- Translate any caption instantly
+- Per-language copy button
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🧠 Patent Innovation — Visual Emotional Narrative Engine (VENE)
+
+Traditional image captioning describes **what** is in an image.
+
+**VENE** understands the **feeling** of the image:
+
+```
+Input: Any image
+
+VENE Output:
+├── 📝 Caption (5 styles — switch instantly)
+├── 🎭 Emotion detection + confidence score
+├── 📖 3-sentence narrative story
+├── 🔍 Object detection list with confidence bars
+├── 🏷️ 12 hashtags + 8 SEO keywords
+├── 🌍 Translation in 7 languages
+└── 🎨 Color mood + scene type classification
 ```
 
-## API
+---
+
+## 🏗️ Architecture
+
+```
+Task3-Image-Captioning/
+├── 🐍 backend/
+│   ├── app.py              # Flask + Groq Vision API
+│   │                       # Image preprocessing (Pillow)
+│   │                       # VENE master prompt engine
+│   │                       # Multi-language translation
+│   │                       # Style restyling endpoint
+│   ├── requirements.txt
+│   └── .env                # GROQ_API_KEY (gitignored)
+├── ⚛️  frontend/
+│   ├── src/
+│   │   ├── App.jsx         # Split-screen UI + all tabs
+│   │   ├── App.css         # Dark design system
+│   │   ├── main.jsx
+│   │   └── index.css       # Global styles + animations
+│   ├── index.html
+│   └── vite.config.js
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🔌 API Endpoints
 
 | Method | Endpoint | Description |
 |:---:|---|---|
-| `POST` | `/api/caption` | Generate a caption from an uploaded image |
-| `POST` | `/api/analyze` | Compatibility alias for `/api/caption` |
-| `POST` | `/api/translate-caption` | Translate a caption into another language |
-| `POST` | `/api/restyle` | Rewrite a caption in another style |
-| `GET` | `/health` | Backend status, model, and pipeline info |
+| `POST` | `/api/analyze` | Full VENE analysis — caption, emotion, story, objects, hashtags |
+| `POST` | `/api/translate-caption` | Translate caption to any of 7 languages |
+| `POST` | `/api/restyle` | Restyle caption without re-uploading image |
+| `GET`  | `/health` | Backend health check |
 
-## Getting Started
+---
+
+## 🚀 Getting Started
 
 ```bash
 # Backend
 cd backend
 pip install -r requirements.txt
-python app.py
+python app.py     # http://localhost:5003
 
-# Frontend
+# Frontend (new terminal)
 cd frontend
 npm install
-npm run dev
+npm run dev       # http://localhost:3003
 ```
 
-The frontend runs on `http://localhost:3003` and proxies API requests to the Flask backend on `http://localhost:5003`.
-
-## Environment
-
-Create `backend/.env` with the optional decoder model configuration:
-
+Add your Groq API key to `backend/.env`:
 ```env
-CAPTION_DECODER_MODEL=google/flan-t5-small
+GROQ_API_KEY=your_key_here
+GROQ_VISION_MODEL=meta-llama/llama-4-scout-17b-16e-instruct
 PORT=5003
 ```
 
-## Tech Stack
+---
 
-- Frontend: React 18, Vite
-- Backend: Flask, Flask-CORS
-- Image processing: Pillow
-- Vision encoder: ResNet50 from torchvision
-- Caption generation: transformer decoder from Hugging Face Transformers
+## 🛠️ Tech Stack
 
-## Notes
+<div align="center">
 
-- The app is intentionally focused on one output: a clean caption.
-- The wording, UI, and project description are aligned with the classic VGG/ResNet encoder plus RNN/transformer decoder architecture.
-- Extra outputs are present, but the main requirement is still satisfied by the captioning pipeline.
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | React 18 + Vite 5 | Split-screen UI |
+| **Backend** | Python 3.10 + Flask | REST API |
+| **Vision AI** | Groq LLaMA4 Scout | Image understanding |
+| **Text AI** | Groq LLaMA3.3-70B | Translation + restyling |
+| **Image processing** | Pillow | Resize + compress |
+| **Styling** | Pure CSS | Dark design system |
 
+</div>
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+### Dharanidharan M
+*CodSoft AI Intern — May Batch C2 2026*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Dharanidharan_M-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dharani-dharan-m-370083376/)
+[![GitHub](https://img.shields.io/badge/GitHub-dharani25007--code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dharani25007-code)
+
+</div>
+
+---
+
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=100&section=footer" width="100%"/>
+</div>
