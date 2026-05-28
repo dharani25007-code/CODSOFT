@@ -1,6 +1,6 @@
 <div align="center">
 
-
+<img src="https://capsule-render.vercel.app/api?type=waving&color=6c63ff&height=200&section=header&text=CODSOFT&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=AI%20Internship%20%7C%20May%20Batch%20C2%20%7C%202026&descAlignY=60&descAlign=50" width="100%"/>
 
 <br/>
 
