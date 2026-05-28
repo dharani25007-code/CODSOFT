@@ -1,0 +1,76 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #07111d;
+  --surface: rgba(14, 22, 36, 0.72);
+  --surface-strong: rgba(18, 28, 44, 0.92);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f4f7fb;
+  --text-muted: #9cabbd;
+  --accent: #14b8a6;
+  --accent-2: #f97316;
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.35);
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(20, 184, 166, 0.16), transparent 32%),
+    radial-gradient(circle at 84% 84%, rgba(249, 115, 22, 0.14), transparent 30%),
+    linear-gradient(180deg, #07111d 0%, #0b1421 55%, #0e1726 100%);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  color-scheme: dark;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.16;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.18s ease;
+}
+
+button:active { transform: scale(0.98); }
+
+img { max-width: 100%; }
+
+::selection { background: rgba(20, 184, 166, 0.3); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pop { 0% { transform: scale(0.85); opacity: 0; } 70% { transform: scale(1.03); } 100% { transform: scale(1); opacity: 1; } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
