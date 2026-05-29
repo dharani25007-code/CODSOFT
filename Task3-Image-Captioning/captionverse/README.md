@@ -10,12 +10,12 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Coming%20Soon-ff6b6b?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
 
 <br/>
 
-> **CaptionVerse** is an upcoming AI-powered Visual Intelligence Engine that extends basic image captioning. It will detect emotions, write stories, identify objects, generate hashtags, and translate captions into multiple languages — planned to leverage **Groq LLaMA3.3-70B** for multimodal understanding.
+> **CaptionVerse** is an AI-powered Visual Intelligence Engine that detects emotions, writes stories, identifies objects, generates hashtags, and translates captions into multiple languages — powered by a mix of PyTorch vision models and text decoders (BLIP / Flan-T5 by default). It integrates with Groq where configured.
 
 </div>
 
@@ -93,23 +93,25 @@ VENE Output:
 ## 🏗️ Architecture
 
 ```
-Task3-Image-Captioning/
-├── 🐍 backend/
-│   ├── app.py              # Flask + Groq Vision API
-│   │                       # Image preprocessing (Pillow)
-│   │                       # VENE master prompt engine
-│   │                       # Multi-language translation
-│   │                       # Style restyling endpoint
-│   ├── requirements.txt
-│   └── .env                # GROQ_API_KEY (gitignored)
-├── ⚛️  frontend/
-│   ├── src/
-│   │   ├── App.jsx         # Split-screen UI + all tabs
-│   │   ├── App.css         # Dark design system
-│   │   ├── main.jsx
-│   │   └── index.css       # Global styles + animations
+Task3-Image-Captioning/captionverse/
+├── backend/
+│   ├── app.py              # Flask + PyTorch (ResNet50/BLIP) + decoder (Flan-T5 by default)
+│   ├── requirements.txt    # Python dependencies
+│   ├── .env                # GROQ_API_KEY, model overrides
+│   ├── test_images/        # sample images (test_*.jpg)
+│   └── __pycache__/
+├── frontend/
 │   ├── index.html
-│   └── vite.config.js
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── CaptionApp.jsx
+│   │   ├── main.jsx
+│   │   ├── App.css
+│   │   ├── CaptionApp.css
+│   │   └── index.css
+│   └── dist/               # build output
 ├── .gitignore
 └── README.md
 ```
