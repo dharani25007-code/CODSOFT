@@ -180,3 +180,9 @@ PORT=5003
 [![GitHub](https://img.shields.io/badge/GitHub-dharani25007--code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dharani25007-code)
 
 </div>
+
+---
+
+<div align="center">
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=100&section=footer" width="100%"/>
+</div>
