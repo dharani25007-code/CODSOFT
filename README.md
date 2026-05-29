@@ -327,10 +327,3 @@ MIT License — free to use and modify.
 
 ---
 
-<div align="center">
-
-**Built with passion for the CodSoft AI Internship ✦**
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=6c63ff&height=100&section=footer" width="100%"/>
-
-</div>
