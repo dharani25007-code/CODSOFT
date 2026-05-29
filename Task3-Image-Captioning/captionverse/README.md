@@ -168,21 +168,3 @@ PORT=5003
 </div>
 
 ---
-
-## 👨‍💻 Author
-
-<div align="center">
-
-### Dharanidharan M
-*CodSoft AI Intern — May Batch C2 2026*
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Dharanidharan_M-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dharani-dharan-m-370083376/)
-[![GitHub](https://img.shields.io/badge/GitHub-dharani25007--code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dharani25007-code)
-
-</div>
-
----
-
-<div align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=100&section=footer" width="100%"/>
-</div>
