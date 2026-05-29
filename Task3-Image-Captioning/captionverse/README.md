@@ -9,13 +9,13 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-LLaMA4%20Scout-FF6B35?style=for-the-badge&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
+![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Coming%20Soon-ff6b6b?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
 
 <br/>
 
-> **CaptionVerse** is an AI-powered Visual Intelligence Engine that goes far beyond basic image captioning. It detects emotions, writes stories, identifies objects, generates hashtags, and translates captions into 7 languages — all powered by **Groq LLaMA4 Scout Vision Model**, completely free.
+> **CaptionVerse** is an upcoming AI-powered Visual Intelligence Engine that extends basic image captioning. It will detect emotions, write stories, identify objects, generate hashtags, and translate captions into multiple languages — planned to leverage **Groq LLaMA3.3-70B** for multimodal understanding.
 
 </div>
 
@@ -144,7 +144,7 @@ npm run dev       # http://localhost:3003
 Add your Groq API key to `backend/.env`:
 ```env
 GROQ_API_KEY=your_key_here
-GROQ_VISION_MODEL=meta-llama/llama-4-scout-17b-16e-instruct
+GROQ_VISION_MODEL=meta-llama/llama-3.3-70b
 PORT=5003
 ```
 
@@ -158,7 +158,7 @@ PORT=5003
 |---|---|---|
 | **Frontend** | React 18 + Vite 5 | Split-screen UI |
 | **Backend** | Python 3.10 + Flask | REST API |
-| **Vision AI** | Groq LLaMA4 Scout | Image understanding |
+| **Vision AI** | Groq LLaMA3.3-70B | Image understanding |
 | **Text AI** | Groq LLaMA3.3-70B | Translation + restyling |
 | **Image processing** | Pillow | Resize + compress |
 | **Styling** | Pure CSS | Dark design system |
