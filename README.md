@@ -9,6 +9,7 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.3-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
@@ -33,7 +34,7 @@
 |---|---|---|---|
 | 1 | **MoodBot** — Adaptive Emotional Resonance Chatbot | React + Node.js + Groq | ✅ Completed |
 | 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed |
-| 3 | **Image Captioning** — CNN + Transformer | Python + Flask | 🔜 Coming soon |
+| 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed |
 | 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed |
 | 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | 🔜 Coming soon |
 
@@ -49,8 +50,8 @@
 
 ### Features
 - 🧠 **Adaptive Emotional Resonance Engine** — patent-worthy
-- 😊 **Real-time mood detection** — 6 emotional states
-- 🔄 **Auto personality switching** — based on your mood
+- 😊 **Real-time mood detection** — keyword pattern matching
+- 🔄 **Auto personality switching** — if-else rule system
 - 🧘 **4 AI Personalities** — Therapist, Hype Friend, Zen Master, Tough Love
 - 🌍 **Auto language detection** — English, Tamil, Hindi
 - 🎤 **Voice input + TTS output** — Web Speech API
@@ -66,14 +67,12 @@ Task1-Chatbot/
 ├── backend/
 │   ├── server.js       # Express + Groq SDK
 │   ├── package.json
-│   └── .env            # GROQ_API_KEY
+│   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx     # Chat UI + voice + sound
-│   │   ├── App.css     # Glassmorphism dark theme
-│   │   └── api.js      # Backend service
+│   │   ├── App.jsx
+│   │   └── App.css
 │   └── vite.config.js
-├── .gitignore
 └── README.md
 ```
 
@@ -83,15 +82,8 @@ Task1-Chatbot/
 
 ### Run Task 1
 ```bash
-# Backend
-cd Task1-Chatbot/backend
-npm install
-node server.js          # http://localhost:5001
-
-# Frontend (new terminal)
-cd Task1-Chatbot/frontend
-npm install
-npm run dev             # http://localhost:3001
+cd Task1-Chatbot/backend && npm install && node server.js   # :5001
+cd Task1-Chatbot/frontend && npm install && npm run dev     # :3001
 ```
 
 ---
@@ -103,15 +95,14 @@ npm run dev             # http://localhost:3001
 <td width="50%">
 
 ### Features
-- 🤖 **Groq LLaMA3** as the AI brain — reasons about every move
+- 🤖 **Groq LLaMA3** as the AI brain
 - 🎯 **4 Difficulty levels** — Easy, Medium, Hard, Unbeatable
 - 🧠 **4 AI Personalities** — Strategic, Aggressive, Defensive, Chaotic
 - 📐 **4 Grid sizes** — 3×3, 4×4, 5×5, 6×6
-- ⏱️ **Move timer** — 5s / 10s / 15s / 20s pressure mode
-- 🏆 **Match mode** — First to 3 / 5 / 7 wins
+- ⏱️ **Move timer** — pressure mode
+- 🏆 **Match mode** — First to 3/5/7 wins
 - 🔊 **Sound effects** — Web Audio API
-- 💡 **AI reasoning** — explains its move every turn
-- 📜 **Move history log** — color-coded per player
+- 💡 **AI reasoning** — explains every move
 
 </td>
 <td width="50%">
@@ -120,16 +111,14 @@ npm run dev             # http://localhost:3001
 ```
 Task2-TicTacToe-AI/
 ├── backend/
-│   ├── server.js       # Express + Groq SDK
+│   ├── server.js       # Express + Groq + Minimax
 │   ├── package.json
-│   └── .env            # GROQ_API_KEY
+│   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx     # Game logic + UI
-│   │   ├── App.css     # Dark design system
-│   │   └── api.js      # Backend service
+│   │   ├── App.jsx
+│   │   └── App.css
 │   └── vite.config.js
-├── .gitignore
 └── README.md
 ```
 
@@ -139,15 +128,62 @@ Task2-TicTacToe-AI/
 
 ### Run Task 2
 ```bash
-# Backend
-cd Task2-TicTacToe-AI/backend
-npm install
-node server.js          # http://localhost:5000
+cd Task2-TicTacToe-AI/backend && npm install && node server.js   # :5000
+cd Task2-TicTacToe-AI/frontend && npm install && npm run dev     # :3000
+```
 
-# Frontend (new terminal)
-cd Task2-TicTacToe-AI/frontend
-npm install
-npm run dev             # http://localhost:3000
+---
+
+## ✅ Task 3 — CaptionVerse Image Captioning
+
+<table>
+<tr>
+<td width="50%">
+
+### Features
+- 🖼️ **VGG16** — 138M param CNN feature extractor
+- 🖼️ **ResNet50** — 25M param residual CNN extractor
+- 🤖 **Groq LLaMA4 Scout** — Transformer caption decoder
+- 📝 **5 Caption styles** — Professional, Poetic, Funny, News, Social
+- 🎭 **Emotion detection** — confidence score
+- 📖 **Scene storytelling** — 3-sentence narrative
+- 🔍 **Object detection** — with confidence bars
+- 🌍 **7 language translation**
+- 🏷️ **12 hashtags + 8 SEO tags**
+
+</td>
+<td width="50%">
+
+### Pipeline
+```
+📷 Image
+   │
+   ▼
+VGG16 / ResNet50
+(CNN Feature Extraction)
+PyTorch ImageNet weights
+   │ 4096 / 2048-dim vector
+   ▼
+Groq LLaMA4 Scout
+(Transformer Decoder)
+   │
+   ▼
+📝 Caption + Story
+   + Emotion + Hashtags
+```
+
+</td>
+</tr>
+</table>
+
+### Run Task 3
+```bash
+cd Task3-Image-Captioning/backend
+pip install -r requirements.txt
+python app.py                          # :5003
+
+cd Task3-Image-Captioning/frontend
+npm install && npm run dev             # :3003
 ```
 
 ---
@@ -177,15 +213,13 @@ Task4-Recommendation-System/
 ├── backend/
 │   ├── app.py          # Flask + Groq + SQLite
 │   ├── requirements.txt
-│   └── .env            # GROQ_API_KEY
+│   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx     # Dashboard + rec cards
-│   │   ├── Auth.jsx    # Login + Register
-│   │   ├── App.css     # Dark universe UI
-│   │   └── api.js      # Backend service
+│   │   ├── App.jsx
+│   │   ├── Auth.jsx
+│   │   └── api.js
 │   └── vite.config.js
-├── .gitignore
 └── README.md
 ```
 
@@ -195,15 +229,12 @@ Task4-Recommendation-System/
 
 ### Run Task 4
 ```bash
-# Backend
 cd Task4-Recommendation-System/backend
 pip install -r requirements.txt
-python app.py           # http://localhost:5002
+python app.py                          # :5002
 
-# Frontend (new terminal)
 cd Task4-Recommendation-System/frontend
-npm install
-npm run dev             # http://localhost:3002
+npm install && npm run dev             # :3002
 ```
 
 ---
@@ -229,14 +260,15 @@ cd CODSOFT
 
 | Layer | Technology | Used in |
 |---|---|---|
-| **Frontend** | React 18 + Vite 5 | Tasks 1, 2, 4 |
+| **Frontend** | React 18 + Vite 5 | Tasks 1, 2, 3, 4 |
 | **Backend** | Node.js + Express | Tasks 1, 2 |
-| **Backend** | Python 3.10 + Flask | Task 4 |
+| **Backend** | Python 3.10 + Flask | Tasks 3, 4 |
 | **AI Model** | Groq LLaMA3.3-70B | Tasks 1, 2, 4 |
+| **Vision AI** | Groq LLaMA4 Scout | Task 3 |
+| **CNN Models** | VGG16 + ResNet50 (PyTorch) | Task 3 |
 | **Fallback AI** | Minimax + Alpha-Beta Pruning | Task 2 |
 | **Database** | SQLite | Task 4 |
 | **Auth** | Flask-Bcrypt + Sessions | Task 4 |
-| **CV Models** | OpenCV + PyTorch | Tasks 3, 5 |
 | **Styling** | Pure CSS (custom dark theme) | All tasks |
 | **Audio** | Web Audio API | Tasks 1, 2 |
 | **Voice** | Web Speech API | Task 1 |
