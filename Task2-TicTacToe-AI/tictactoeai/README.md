@@ -229,3 +229,7 @@ Two AI engines work together:
 <div align="center">
 
 **CodSoft AI Internship — Task 2 ✦**
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=6c63ff&height=100&section=footer" width="100%"/>
+
+</div>
