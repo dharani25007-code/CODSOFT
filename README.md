@@ -188,6 +188,26 @@ npm install && npm run dev             # :3003
 
 ---
 
+### Architecture
+
+```
+Task3-Image-Captioning/
+├── backend/
+│   ├── app.py              # Flask + Groq Vision API + PyTorch
+│   ├── requirements.txt
+│   └── .env                # GROQ_API_KEY
+├── frontend/
+│   ├── src/
+│   │   ├── CaptionApp.jsx  # Main UI + style & translation tabs
+│   │   ├── CaptionApp.css
+│   │   └── main.jsx
+│   ├── index.html
+│   └── vite.config.js
+└── README.md
+```
+
+---
+
 ## ✅ Task 4 — UniRec Universal AI Recommendation Engine
 
 <table>
