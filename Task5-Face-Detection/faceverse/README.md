@@ -215,3 +215,87 @@ Task5-Face-Detection/
 - Python 3.10+
 - Node.js 18+
 - Free [Groq API key](https://console.groq.com)
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/dharani25007-code/CODSOFT.git
+cd CODSOFT/Task5-Face-Detection
+```
+
+### 2. Backend setup
+```bash
+cd backend
+pip install -r requirements.txt
+```
+
+Create `.env`:
+```env
+GROQ_API_KEY=your_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+PORT=5004
+```
+
+Start backend:
+```bash
+python app.py
+# ✅ Running at http://localhost:5004
+# ✅ Haar Cascade loaded
+# ✅ DNN model auto-downloaded
+```
+
+### 3. Frontend setup
+```bash
+cd frontend
+npm install
+npm run dev
+# ✅ Running at http://localhost:3004
+```
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | React 18 + Vite 5 | UI — image, webcam, registry, stats |
+| **Backend** | Python 3.10 + Flask | REST API server |
+| **Detector 1** | Haar Cascade (OpenCV) | Classic fast face detection |
+| **Detector 2** | DNN SSD ResNet (OpenCV) | Deep learning face detection |
+| **Emotion AI** | Groq LLaMA3.3-70B | Emotion + age + gender analysis |
+| **Database** | SQLite | Face registry + detection log |
+| **Styling** | Pure CSS | Dark teal design system |
+
+</div>
+
+---
+
+## 📄 License
+
+MIT License — free to use and modify.
+
+---
+
+## 👨‍💻 Author
+
+<div align="center">
+
+### Dharanidharan M
+*CodSoft AI Intern — May Batch C2 2026*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Dharanidharan_M-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dharani-dharan-m-370083376/)
+[![GitHub](https://img.shields.io/badge/GitHub-dharani25007--code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dharani25007-code)
+
+</div>
+
+---
+
+<div align="center">
+
+**CodSoft AI Internship — Task 5 ✦**
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=00d4aa&height=100&section=footer" width="100%"/>
+
+
+</div>
