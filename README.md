@@ -36,7 +36,7 @@
 | 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed |
 | 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed |
 | 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed |
-| 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | ✅ Completed |
+| 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | 🔜 Coming soon |
 
 </div>
 
@@ -188,33 +188,6 @@ npm install && npm run dev             # :3003
 
 ---
 
-### Architecture
-
-```
-Task3-Image-Captioning/captionverse/
-├── backend/
-│   ├── app.py              # Flask + PyTorch (ResNet50/BLIP) + decoder (Flan-T5 by default)
-│   ├── requirements.txt
-│   ├── .env                # GROQ_API_KEY, model overrides
-│   ├── test_images/        # sample images (test_*.jpg)
-│   └── __pycache__/
-├── frontend/
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── CaptionApp.jsx
-│   │   ├── main.jsx
-│   │   ├── App.css
-│   │   ├── CaptionApp.css
-│   │   └── index.css
-│   └── dist/
-└── README.md
-```
-
----
-
 ## ✅ Task 4 — UniRec Universal AI Recommendation Engine
 
 <table>
@@ -291,7 +264,7 @@ cd CODSOFT
 | **Backend** | Node.js + Express | Tasks 1, 2 |
 | **Backend** | Python 3.10 + Flask | Tasks 3, 4 |
 | **AI Model** | Groq LLaMA3.3-70B | Tasks 1, 2, 4 |
-| **Vision AI** | PyTorch (ResNet/BLIP) + Groq (optional) | Task 3 |
+| **Vision AI** | Groq LLaMA4 Scout | Task 3 |
 | **CNN Models** | VGG16 + ResNet50 (PyTorch) | Task 3 |
 | **Fallback AI** | Minimax + Alpha-Beta Pruning | Task 2 |
 | **Database** | SQLite | Task 4 |
