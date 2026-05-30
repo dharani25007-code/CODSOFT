@@ -1,0 +1,56 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:      #06070e;
+  --bg2:     #0b0d1a;
+  --bg3:     #111326;
+  --bg4:     #181b30;
+  --glass:   rgba(255,255,255,0.04);
+  --glass2:  rgba(255,255,255,0.07);
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text:    #e8eaf6;
+  --text2:   #7878aa;
+  --text3:   #3a3a5c;
+  --accent:  #00d4aa;
+  --accent2: #00b894;
+  --glow:    rgba(0,212,170,0.2);
+  --red:     #f87171;
+  --yellow:  #fbbf24;
+  --blue:    #60a5fa;
+  --purple:  #a78bfa;
+  --pink:    #f472b6;
+  --success: #34d399;
+  --font:    "Inter", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", monospace;
+  --radius:  14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+html { font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(0,212,170,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(167,139,250,0.06) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+#root { position: relative; z-index: 1; }
+button { font-family: var(--font); cursor: pointer; border: none; outline: none; transition: all 0.18s; }
+button:active { transform: scale(0.97); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 99px; }
+@keyframes fadeIn  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin    { to{transform:rotate(360deg)} }
+@keyframes pop     { 0%{transform:scale(0.8);opacity:0} 70%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+@keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes scan    { from{top:-10%} to{top:110%} }
+@keyframes float   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0.2} }
