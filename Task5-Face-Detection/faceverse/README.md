@@ -292,3 +292,9 @@ MIT License — free to use and modify.
 ---
 
 <div align="center">
+
+**CodSoft AI Internship — Task 5 ✦**
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=00d4aa&height=100&section=footer" width="100%"/>
+
+</div>
