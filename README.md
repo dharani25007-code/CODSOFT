@@ -36,7 +36,7 @@
 | 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed |
 | 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed |
 | 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed |
-| 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | 🔜 Coming soon |
+| 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | ✅ Completed |
 
 </div>
 
