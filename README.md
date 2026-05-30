@@ -10,17 +10,18 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.3-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-4.10-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
 ![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Active-22c55e?style=for-the-badge)
+![Tasks](https://img.shields.io/badge/Tasks-5%2F5%20Completed-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
 
 <br/>
 
-> **CodSoft AI Internship** — 5 tasks built with modern full-stack architecture, powered by **Groq LLaMA3.3-70B**, featuring unique UI/UX, patent-worthy innovations, sound effects, and novelties far beyond the basic requirements.
+> **CodSoft AI Internship — May Batch C2 2026** — All 5 tasks completed with modern full-stack architecture, powered by **Groq LLaMA3.3-70B**.
 
 <br/>
 
-[📋 Tasks](#-tasks) · [🚀 Getting Started](#-getting-started) · [🛠️ Tech Stack](#%EF%B8%8F-tech-stack) · [👨‍💻 Author](#-author)
+[📋 Tasks](#-tasks) · [🚀 Getting Started](#-getting-started) · [🛠️ Tech Stack](#-tech-stack) · [👨‍💻 Author](#-author)
 
 </div>
 
@@ -36,7 +37,7 @@
 | 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed |
 | 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed |
 | 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed |
-| 5 | **Face Detection & Recognition** — Deep learning | Python + OpenCV | 🔜 Coming soon |
+| 5 | **FaceVerse** — Haar + DNN Face Detection & Recognition | Python + Flask + OpenCV + Groq | ✅ Completed |
 
 </div>
 
@@ -49,23 +50,40 @@
 <td width="50%">
 
 ### Features
-- 🧠 **Adaptive Emotional Resonance Engine** — patent-worthy
-- 😊 **Real-time mood detection** — keyword pattern matching
-- 🔄 **Auto personality switching** — if-else rule system
-- 🧘 **4 AI Personalities** — Therapist, Hype Friend, Zen Master, Tough Love
-- 🌍 **Auto language detection** — English, Tamil, Hindi
-- 🎤 **Voice input + TTS output** — Web Speech API
-- 📜 **Full conversation memory**
+- 🧠 **Adaptive Emotional Resonance Engine**
+- 😊 **Real-time mood detection**
+- 🔄 **Auto personality switching**
+- 🧘 **4 AI Personalities**
+- 🌍 **Auto language detection**
+- 🎤 **Voice input + TTS output**
+- 📜 **Conversation memory**
 - 📊 **Mood journey + summary**
 
 </td>
 <td width="50%">
 
-### Architecture
+### Pipeline
+```mermaid
+flowchart LR
+    U["User Input<br>(text / voice)"] --> F["Frontend UI"]
+    F --> API["API / WebSocket"]
+    API --> MD["Backend Mood & Intent Detector"]
+    MD --> PS{Personality Selector}
+    PS --> P1[Therapist]
+    PS --> P2["Hype Friend"]
+    PS --> P3["Zen Master"]
+    PS --> P4["Tough Love"]
+    P1 --> RESP["Groq LLaMA3.3-70B Response"]
+    RESP --> PP["Post-processing<br>(memory, safety, tags)"]
+    PP --> OUT["TTS (optional) / Text Output"]
+    OUT --> F
 ```
+
+### Architecture
+```text
 Task1-Chatbot/
 ├── backend/
-│   ├── server.js       # Express + Groq SDK
+│   ├── server.js
 │   ├── package.json
 │   └── .env
 ├── frontend/
@@ -96,22 +114,38 @@ cd Task1-Chatbot/frontend && npm install && npm run dev     # :3001
 
 ### Features
 - 🤖 **Groq LLaMA3** as the AI brain
-- 🎯 **4 Difficulty levels** — Easy, Medium, Hard, Unbeatable
-- 🧠 **4 AI Personalities** — Strategic, Aggressive, Defensive, Chaotic
-- 📐 **4 Grid sizes** — 3×3, 4×4, 5×5, 6×6
-- ⏱️ **Move timer** — pressure mode
-- 🏆 **Match mode** — First to 3/5/7 wins
-- 🔊 **Sound effects** — Web Audio API
-- 💡 **AI reasoning** — explains every move
+- 🎯 **4 Difficulty levels**
+- 🧠 **4 AI Personalities**
+- 📐 **Multiple grid sizes**
+- ⏱️ **Move timer**
+- 🏆 **Match mode**
+- 🔊 **Sound effects**
+- 💡 **AI reasoning + explanations**
 
 </td>
 <td width="50%">
 
-### Architecture
+### Pipeline
+```mermaid
+flowchart LR
+    P["Player Action"] --> F["Frontend UI"]
+    F --> API["API Call"]
+    API --> S["Server Game Logic"]
+    S --> AI{AI Decision}
+    AI --> GReq["Groq LLaMA3.3-70B<br>(strategy hint)"]
+    AI --> Minimax["Minimax + Alpha-Beta<br>(fallback move)"]
+    GReq --> Move["Select Move"]
+    Minimax --> Move
+    Move --> S
+    S --> State["Update Board & History"]
+    State --> F
 ```
+
+### Architecture
+```text
 Task2-TicTacToe-AI/
 ├── backend/
-│   ├── server.js       # Express + Groq + Minimax
+│   ├── server.js
 │   ├── package.json
 │   └── .env
 ├── frontend/
@@ -141,35 +175,51 @@ cd Task2-TicTacToe-AI/frontend && npm install && npm run dev     # :3000
 <td width="50%">
 
 ### Features
-- 🖼️ **VGG16** — 138M param CNN feature extractor
-- 🖼️ **ResNet50** — 25M param residual CNN extractor
-- 🤖 **Groq LLaMA4 Scout** — Transformer caption decoder
-- 📝 **5 Caption styles** — Professional, Poetic, Funny, News, Social
-- 🎭 **Emotion detection** — confidence score
-- 📖 **Scene storytelling** — 3-sentence narrative
-- 🔍 **Object detection** — with confidence bars
-- 🌍 **7 language translation**
-- 🏷️ **12 hashtags + 8 SEO tags**
+- 🖼️ **VGG16** — CNN feature extractor
+- 🖼️ **ResNet50** — residual CNN extractor
+- 🤖 **Groq LLaMA4 Scout** — caption decoder
+- 📝 **Multiple caption styles**
+- 🎭 **Emotion detection**
+- 📖 **Scene storytelling**
+- 🔍 **Object detection**
+- 🌍 **Multilingual captions & translation**
 
 </td>
 <td width="50%">
 
 ### Pipeline
+```mermaid
+flowchart LR
+    A["Input Image"] --> B["Preprocessing<br>Resize / Normalize"]
+    B --> C1["VGG16<br>Feature Extractor"]
+    B --> C2["ResNet50<br>Feature Extractor"]
+    C1 --> D["Feature Fusion<br>4096 / 2048-dim embeddings"]
+    D --> E["Groq LLaMA4 Scout<br>Caption Decoder"]
+    E --> F["Caption Styles<br>Professional / Poetic / Funny / Social"]
+    E --> G["Scene Storytelling<br>Emotion + Narrative"]
+    E --> H["SEO Layer<br>Hashtags + Tags + Translation"]
+    F --> I["Final Output"]
 ```
-📷 Image
-   │
-   ▼
-VGG16 / ResNet50
-(CNN Feature Extraction)
-PyTorch ImageNet weights
-   │ 4096 / 2048-dim vector
-   ▼
-Groq LLaMA4 Scout
-(Transformer Decoder)
-   │
-   ▼
-📝 Caption + Story
-   + Emotion + Hashtags
+
+### Architecture
+```text
+Task3-Image-Captioning/captionverse/
+├── backend/
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── .env
+│   ├── models/
+│   └── test_images/
+├── frontend/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   └── src/
+│       ├── App.jsx
+│       ├── CaptionApp.jsx
+│       ├── main.jsx
+│       └── App.css
+└── README.md
 ```
 
 </td>
@@ -195,30 +245,37 @@ npm install && npm run dev             # :3003
 <td width="50%">
 
 ### Features
-- 🌍 **8 Categories** — Movies, Music, Books, Games, Food, Fitness, Travel, Apps
-- 🧬 **Emotional DNA Fingerprint** — unique preference profile
-- 🔗 **Cross-Category Resonance** — connects dots across categories
-- 🗺️ **Mood-to-Universe Mapping** — 8 moods × 8 categories
-- 🔐 **Login / Register** — bcrypt auth + sessions
-- ⭐ **Rate & Save** — 5-star ratings + favourites
-- 🔍 **Universal search** — find anything
-- 📱 **Real links** — IMDb, Spotify, Goodreads, Steam
+- 🌍 **Multiple categories**
+- 🧬 **Emotional DNA Fingerprint**
+- 🔗 **Cross-category resonance**
+- 🔐 **Login / Register**
+- ⭐ **Rate & Save**
+- 🔍 **Universal search**
 
 </td>
 <td width="50%">
 
-### Architecture
+### Pipeline
+```mermaid
+flowchart LR
+    U["User Profile / Event"] --> Ingest["Ingestion & Preprocessing"]
+    Ingest --> FS["Feature Store / Embeddings"]
+    FS --> Model["Recommendation Engine<br>(Groq + Collaborative / Content)"]
+    Model --> Rank["Scoring & Ranking"]
+    Rank --> Serve["API / Frontend"]
+    Serve --> Feedback["User Feedback Loop"]
+    Feedback --> Ingest
 ```
+
+### Architecture
+```text
 Task4-Recommendation-System/
 ├── backend/
-│   ├── app.py          # Flask + Groq + SQLite
+│   ├── app.py
 │   ├── requirements.txt
 │   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx
-│   │   ├── Auth.jsx
-│   │   └── api.js
 │   └── vite.config.js
 └── README.md
 ```
@@ -239,12 +296,75 @@ npm install && npm run dev             # :3002
 
 ---
 
+## ✅ Task 5 — FaceVerse Facial Intelligence Engine
+
+<table>
+<tr>
+<td width="50%">
+
+### Features
+- 🔍 **Haar Cascade** — classical detector
+- 🧠 **DNN SSD ResNet** — deep detector
+- 😊 **Emotion recognition**
+- 👤 **Age & gender estimation**
+- 👥 **Crowd analysis**
+- 🎥 **Live webcam stream**
+- 🏷️ **Face registry (SQLite)**
+
+</td>
+<td width="50%">
+
+### Pipeline
+```mermaid
+flowchart TB
+    A["Image / Webcam Stream"] --> B["Frame Capture + Preprocessing"]
+    B --> C{Face Detection}
+    C --> C1["Haar Cascade<br>Fast classical detector"]
+    C --> C2["DNN SSD ResNet<br>Deep detection"]
+    C1 --> D["Face Crops + Bounding Boxes"]
+    D --> E["Groq LLaMA3.3-70B<br>Emotion / Age / Gender"]
+    D --> F["Face Registry<br>Name lookup + SQLite"]
+    D --> G["Crowd Analysis Engine<br>Count / Density / Area"]
+    E --> H["Insights Aggregator"]
+    H --> I["Annotated Output<br>Dashboard + Intelligence Report"]
+```
+
+### Architecture
+```text
+Task5-Face-Detection/faceverse/
+├── backend/
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── models/
+│   └── recordings/
+├── frontend/
+│   ├── index.html
+│   └── src/
+└── README.md
+```
+
+</td>
+</tr>
+</table>
+
+### Run Task 5
+```bash
+cd Task5-Face-Detection/backend
+pip install -r requirements.txt
+python app.py                          # :5004
+
+cd Task5-Face-Detection/frontend
+npm install && npm run dev             # :3004
+```
+
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+
 - Python 3.10+
-- Free [Groq API key](https://console.groq.com) — no credit card needed
+- Free Groq API key
 
 ### Clone the repo
 ```bash
@@ -260,18 +380,16 @@ cd CODSOFT
 
 | Layer | Technology | Used in |
 |---|---|---|
-| **Frontend** | React 18 + Vite 5 | Tasks 1, 2, 3, 4 |
+| **Frontend** | React 18 + Vite 5 | Tasks 1–5 |
 | **Backend** | Node.js + Express | Tasks 1, 2 |
-| **Backend** | Python 3.10 + Flask | Tasks 3, 4 |
-| **AI Model** | Groq LLaMA3.3-70B | Tasks 1, 2, 4 |
+| **Backend** | Python 3.10 + Flask | Tasks 3, 4, 5 |
+| **AI Model** | Groq LLaMA3.3-70B | Tasks 1, 2, 4, 5 |
 | **Vision AI** | Groq LLaMA4 Scout | Task 3 |
 | **CNN Models** | VGG16 + ResNet50 (PyTorch) | Task 3 |
-| **Fallback AI** | Minimax + Alpha-Beta Pruning | Task 2 |
-| **Database** | SQLite | Task 4 |
-| **Auth** | Flask-Bcrypt + Sessions | Task 4 |
-| **Styling** | Pure CSS (custom dark theme) | All tasks |
-| **Audio** | Web Audio API | Tasks 1, 2 |
-| **Voice** | Web Speech API | Task 1 |
+| **Face Detector** | Haar Cascade + DNN SSD ResNet | Task 5 |
+| **Database** | SQLite | Tasks 4, 5 |
+| **CV Library** | OpenCV 4.10 | Task 5 |
+| **Styling** | Pure CSS | All tasks |
 
 </div>
 
@@ -293,7 +411,6 @@ MIT License — free to use and modify.
 
 *CodSoft AI Intern — May Batch C2 2026*
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Dharanidharan_M-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dharani-dharan-m-370083376/)
 [![GitHub](https://img.shields.io/badge/GitHub-dharani25007--code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dharani25007-code)
 
 </div>
@@ -302,7 +419,7 @@ MIT License — free to use and modify.
 
 <div align="center">
 
-**Built with passion for the CodSoft AI Internship ✦**
+**All 5 tasks completed — CodSoft AI Internship ✦**
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=6c63ff&height=100&section=footer" width="100%"/>
 
