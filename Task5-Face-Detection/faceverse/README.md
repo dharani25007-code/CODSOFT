@@ -141,11 +141,32 @@ Traditional face detection just draws boxes.
 
 ---
 
+## 🔄 Pipeline
+
+```mermaid
+flowchart TB
+  A[Image upload or webcam frame] --> B[Frame preprocessing\nresize / color normalize / encode]
+  B --> C{Detection path}
+  C --> C1[Haar Cascade\nfast classical detection]
+  C --> C2[DNN SSD ResNet\nhigh-accuracy deep detection]
+  C1 --> D[Face crops + bounding boxes]
+  C2 --> D
+  D --> E[Groq LLaMA3.3-70B\nemotion + age + gender]
+  D --> F[Face registry lookup\nSQLite names + history]
+  D --> G[Crowd analysis\ncount + density + area metrics]
+  E --> H[Insights aggregation]
+  F --> H
+  G --> H
+  H --> I[Annotated output\nbounding boxes + report + dashboard]
+```
+
+---
+
 ## 🏗️ Architecture
 
-```
+```text
 Task5-Face-Detection/
-├── 🐍 backend/
+├── backend/
 │   ├── app.py                 # Flask API
 │   │                          # Haar Cascade detector
 │   │                          # DNN SSD ResNet detector
@@ -158,8 +179,8 @@ Task5-Face-Detection/
 │   │   ├── deploy.prototxt
 │   │   └── res10_300x300_ssd_iter_140000.caffemodel
 │   └── .env
-│
-├── ⚛️  frontend/
+
+├── frontend/
 │   ├── src/
 │   │   ├── App.jsx            # Full UI — image + webcam + registry + stats
 │   │   ├── App.css            # Dark teal design system
@@ -167,7 +188,7 @@ Task5-Face-Detection/
 │   │   └── index.css
 │   ├── index.html
 │   └── vite.config.js
-│
+
 ├── .gitignore
 └── README.md
 ```

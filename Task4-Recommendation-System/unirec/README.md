@@ -121,6 +121,22 @@ Mood: Motivated 💪
 
 ---
 
+## 🔄 Pipeline
+
+```mermaid
+flowchart TB
+  A[User login + mood + query] --> B[Auth layer\nregister / login / session check]
+  B --> C[Preference store\nrating history + favorites + mood history]
+  C --> D[Emotional DNA builder\ncategory affinity + mood profile]
+  D --> E[Cross-category resonance engine\nfind connected interests]
+  E --> F[Groq LLaMA3.3-70B\nrecommendation synthesis]
+  F --> G[Ranking + filtering\nmatch score + trending + relevance]
+  G --> H[Results formatter\nrecommendation cards + links + why this fits]
+  H --> I[Frontend dashboard\nsearch, save, rate, share]
+```
+
+---
+
 ## 🏗️ Architecture
 
 ```

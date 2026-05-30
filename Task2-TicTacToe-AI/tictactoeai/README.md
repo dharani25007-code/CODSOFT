@@ -209,6 +209,27 @@ Two AI engines work together:
 
 ---
 
+## 🔄 Pipeline
+
+```mermaid
+flowchart TB
+  A[Player action\ncell click / timeout] --> B[Move validator\nsize + turn + legality]
+  B --> C[Game state updater\nboard + history + winner check]
+  C --> D{AI turn?}
+  D -- No --> E[Render board + turn indicators]
+  D -- Yes --> F[Difficulty router\nEasy / Medium / Hard / Unbeatable]
+  F --> G[Personality layer\nStrategic / Aggressive / Defensive / Chaotic]
+  G --> H{Board size}
+  H -- 3x3 --> I[Minimax + Alpha-Beta\noptimal search]
+  H -- 4x4 to 6x6 --> J[Groq LLaMA3-8B\nmove reasoning prompt]
+  I --> K[AI move + reasoning]
+  J --> K
+  K --> L[UI feedback\nsound effect + move log + winner modal]
+  L --> E
+```
+
+---
+
 ## 👨‍💻 Author
 
 <div align="center">

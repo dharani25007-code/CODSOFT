@@ -90,15 +90,33 @@ VENE Output:
 
 ---
 
+## 🔄 Pipeline
+
+```mermaid
+flowchart TB
+	A[Input image] --> B[Preprocessing\nresize / normalize / compress]
+	B --> C{Feature extractor}
+	C --> C1[ResNet50\nresidual visual embeddings]
+	C --> C2[BLIP / VGG16\ncaption-friendly visual features]
+	C1 --> D[Feature fusion]
+	C2 --> D
+	D --> E[Caption decoder\nFlan-T5 or Groq text model]
+	E --> F[Analysis heads\nemotion / scene / objects / style]
+	F --> G[Post-processing\nhashtags + SEO + translation]
+	G --> H[Final output\ncaption + story + analytics]
+```
+
+---
+
 ## 🏗️ Architecture
 
-```
+```text
 Task3-Image-Captioning/captionverse/
 ├── backend/
 │   ├── app.py              # Flask + PyTorch (ResNet50/BLIP) + decoder (Flan-T5 by default)
-│   ├── requirements.txt    # Python dependencies
-│   ├── .env                # GROQ_API_KEY, model overrides
-│   ├── test_images/        # sample images (test_*.jpg)
+│   ├── requirements.txt     # Python dependencies
+│   ├── .env                 # GROQ_API_KEY, model overrides
+│   ├── test_images/         # sample images (test_*.jpg)
 │   └── __pycache__/
 ├── frontend/
 │   ├── index.html

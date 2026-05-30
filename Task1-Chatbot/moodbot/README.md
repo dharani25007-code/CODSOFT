@@ -102,6 +102,22 @@ Traditional chatbots respond to **keywords**. MoodBot responds to **emotions**.
 
 ---
 
+## 🔄 Pipeline
+
+```mermaid
+flowchart LR
+  A[User message or voice input] --> B[Speech-to-text / text normalization]
+  B --> C[Mood detection engine\nkeywords + emojis + sentiment rules]
+  C --> D[Language detector\nEnglish / Tamil / Hindi]
+  C --> E[Personality selector\nauto / therapist / hype / zen / tough]
+  D --> F[Prompt composer\ncontext + mood + language + persona]
+  E --> F
+  F --> G[Groq LLaMA3.3-70B\nresponse generation]
+  G --> H[Response enricher\nmood tag + persona tag + summary data]
+  H --> I[Frontend chat UI\ntyping effect + mood chip + memory log]
+  H --> J[Text-to-speech output]
+```
+
 ## 🏗️ Architecture
 
 ```
