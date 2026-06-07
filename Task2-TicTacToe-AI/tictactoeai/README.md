@@ -230,6 +230,13 @@ flowchart TB
 
 ---
 
+## 👨‍💻 Author
+
+<div align="center">
+
+<img src="https://github.com/dharani25007-code.png" width="100" style="border-radius:50%"/>
+
+### Dharanidharan M
 
 *CodSoft AI Intern — May Batch C2 2026*
 
