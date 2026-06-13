@@ -24,10 +24,10 @@ os.makedirs(MODELS_DIR, exist_ok=True)
 MODEL_URLS = {
     "deploy.prototxt": "https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt",
     "res10_300x300_ssd_iter_140000.caffemodel": "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
-    "age_deploy.prototxt": "https://raw.githubusercontent.com/GilLevi/AgeGenderDeepLearning/master/age_net.prototxt",
-    "age_net.caffemodel": "https://drive.google.com/uc?id=1kiusFljZc9QfcIYdU2s7xrtWHTraHwmr",
-    "gender_deploy.prototxt": "https://raw.githubusercontent.com/GilLevi/AgeGenderDeepLearning/master/gender_net.prototxt",
-    "gender_net.caffemodel": "https://drive.google.com/uc?id=1W_moLzMlGiELyPxWiYQJ9KFaXroQ_NFQ",
+    "age_deploy.prototxt": "https://raw.githubusercontent.com/spmallick/learnopencv/master/AgeGender/age_deploy.prototxt",
+    "age_net.caffemodel": "https://huggingface.co/AjaySharma/genderDetection/resolve/main/age_net.caffemodel",
+    "gender_deploy.prototxt": "https://raw.githubusercontent.com/spmallick/learnopencv/master/AgeGender/gender_deploy.prototxt",
+    "gender_net.caffemodel": "https://huggingface.co/AjaySharma/genderDetection/resolve/main/gender_net.caffemodel",
 }
 
 AGE_LIST    = ["(0-2)", "(4-6)", "(8-12)", "(15-20)", "(25-32)", "(38-43)", "(48-53)", "(60-100)"]
@@ -108,6 +108,127 @@ def get_eye_cascade():
             _cache["eye_cascade"] = None
     return _cache["eye_cascade"]
 
+def get_age_net():
+    if "age_net" not in _cache:
+        try:
+            import cv2
+            proto = download_model("age_deploy.prototxt", MODEL_URLS["age_deploy.prototxt"])
+            model = download_model("age_net.caffemodel", MODEL_URLS["age_net.caffemodel"])
+            if proto and model:
+                _cache["age_net"] = cv2.dnn.readNetFromCaffe(proto, model)
+                print("✅ Age Caffe model loaded")
+            else:
+                _cache["age_net"] = None
+        except Exception as e:
+            print(f"⚠️  Age model load failed: {e}")
+            _cache["age_net"] = None
+    return _cache["age_net"]
+
+def get_gender_net():
+    if "gender_net" not in _cache:
+        try:
+            import cv2
+            proto = download_model("gender_deploy.prototxt", MODEL_URLS["gender_deploy.prototxt"])
+            model = download_model("gender_net.caffemodel", MODEL_URLS["gender_net.caffemodel"])
+            if proto and model:
+                _cache["gender_net"] = cv2.dnn.readNetFromCaffe(proto, model)
+                print("✅ Gender Caffe model loaded")
+            else:
+                _cache["gender_net"] = None
+        except Exception as e:
+            print(f"⚠️  Gender model load failed: {e}")
+            _cache["gender_net"] = None
+    return _cache["gender_net"]
+
+def predict_age_gender_local(img, faces):
+    import cv2
+    age_net = get_age_net()
+    gender_net = get_gender_net()
+    if age_net is None or gender_net is None:
+        return None
+    
+    MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+    results = []
+    img_h, img_w = img.shape[:2]
+    
+    for i, face in enumerate(faces):
+        x, y, w, h = face["x"], face["y"], face["w"], face["h"]
+        
+        # Add a minor 5% padding to capture full head context
+        pad_x = int(w * 0.05)
+        pad_y = int(h * 0.05)
+        x1 = max(0, x - pad_x)
+        y1 = max(0, y - pad_y)
+        x2 = min(img_w, x + w + pad_x)
+        y2 = min(img_h, y + h + pad_y)
+        
+        if x2 - x1 <= 0 or y2 - y1 <= 0:
+            results.append({
+                "face_id": i + 1,
+                "age_range": "20-35",
+                "gender": "Unknown",
+                "gender_confidence": 50
+            })
+            continue
+            
+        face_img = img[y1:y2, x1:x2]
+        try:
+            # Test-Time Augmentation (TTA)
+            crops = [face_img]
+            crops.append(cv2.flip(face_img, 1)) # Flipped
+            
+            # 90% center crop
+            ch, cw = face_img.shape[:2]
+            cy1, cy2 = int(ch * 0.05), int(ch * 0.95)
+            cx1, cx2 = int(cw * 0.05), int(cw * 0.95)
+            if (cy2 - cy1) > 0 and (cx2 - cx1) > 0:
+                crops.append(face_img[cy1:cy2, cx1:cx2])
+                
+            age_sum = np.zeros((1, 8))
+            gender_sum = np.zeros((1, 2))
+            
+            for c in crops:
+                blob = cv2.dnn.blobFromImage(c, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
+                
+                # Predict gender
+                gender_net.setInput(blob)
+                gender_preds = gender_net.forward()
+                gender_sum += gender_preds
+                
+                # Predict age
+                age_net.setInput(blob)
+                age_preds = age_net.forward()
+                age_sum += age_preds
+                
+            age_idx = age_sum.argmax()
+            gender_idx = gender_sum.argmax()
+            
+            age_range = AGE_LIST[age_idx]
+            gender = GENDER_LIST[gender_idx]
+            
+            # Normalize confidence score
+            gender_confidence = int(round((gender_sum[0][gender_idx] / len(crops)) * 100))
+            gender_confidence = max(0, min(100, gender_confidence))
+            
+            if age_range.startswith("(") and age_range.endswith(")"):
+                age_range = age_range[1:-1]
+                
+            results.append({
+                "face_id": i + 1,
+                "age_range": age_range,
+                "gender": gender,
+                "gender_confidence": gender_confidence
+            })
+        except Exception as e:
+            print(f"⚠️  Local age/gender prediction failed for face {i+1}: {e}")
+            results.append({
+                "face_id": i + 1,
+                "age_range": "20-35",
+                "gender": "Unknown",
+                "gender_confidence": 50
+            })
+    return results
+
 # ── DB setup ──────────────────────────────────────────────────────────────────
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -137,10 +258,24 @@ init_db()
 # ── Image helpers ─────────────────────────────────────────────────────────────
 def decode_image(data):
     import cv2
+    if not data:
+        return None
     if isinstance(data, str) and data.startswith("data:"):
-        data = data.split(",")[1]
-    img_bytes = base64.b64decode(data)
+        parts = data.split(",")
+        if len(parts) < 2:
+            return None
+        data = parts[1]
+    if not data:
+        return None
+    try:
+        img_bytes = base64.b64decode(data)
+    except Exception:
+        return None
+    if not img_bytes:
+        return None
     arr = np.frombuffer(img_bytes, np.uint8)
+    if arr.size == 0:
+        return None
     return cv2.imdecode(arr, cv2.IMREAD_COLOR)
 
 def encode_image(img):
@@ -344,7 +479,15 @@ def analyze():
         # ── Step 3: Groq Emotion Analysis ────────────────────────────────────────
         face_descriptions = [f"Face {i+1} at position ({f['x']},{f['y']}) size {f['w']}x{f['h']}" for i, f in enumerate(faces)]
         emotions = estimate_emotion_groq(face_count, face_descriptions) if face_count > 0 else []
-        age_gender = estimate_age_gender_groq(face_count) if face_count > 0 else []
+        
+        # Try local age/gender prediction, fallback to Groq
+        age_gender = None
+        if face_count > 0:
+            age_gender = predict_age_gender_local(img, faces)
+            if not age_gender:
+                age_gender = estimate_age_gender_groq(face_count)
+        else:
+            age_gender = []
 
         # ── Step 4: Crowd Analysis ────────────────────────────────────────────────
         crowd = crowd_analysis(face_count, img_area)
@@ -441,4 +584,6 @@ if __name__ == "__main__":
     print("Loading models...")
     get_haar()
     get_face_detector_dnn()
+    get_age_net()
+    get_gender_net()
     app.run(debug=True, port=PORT, threaded=True)

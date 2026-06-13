@@ -143,17 +143,24 @@ export default function App() {
     }
   };
 
-  const stopWebcam = () => {
+  const stopWebcam = useCallback(() => {
     streamRef.current?.getTracks().forEach(t => t.stop());
     clearInterval(intervalRef.current);
     setWebcamActive(false);
     setWebcamResult(null);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (tab !== "webcam") {
+      stopWebcam();
+    }
+  }, [tab, stopWebcam]);
 
   const captureAndAnalyze = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) return;
-    const canvas = canvasRef.current;
     const video  = videoRef.current;
+    if (video.videoWidth === 0 || video.videoHeight === 0) return;
+    const canvas = canvasRef.current;
     canvas.width  = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext("2d").drawImage(video, 0, 0);
