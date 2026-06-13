@@ -67,7 +67,7 @@ export default function App() {
   const [personality, setPersonality] = useState("auto");
   const [currentMood, setCurrentMood] = useState("neutral");
   const [allMoods, setAllMoods]       = useState([]);
-  const [currentPersona, setCurrentPersona] = useState({ name: "MoodBot", emoji: "🤖" });
+  const [currentPersona, setCurrentPersona] = useState({ name: "Anima", emoji: "🤖" });
   const [soundOn, setSoundOn]         = useState(true);
   const [voiceOn, setVoiceOn]         = useState(false);
   const [listening, setListening]     = useState(false);
@@ -179,7 +179,7 @@ export default function App() {
     setCurrentMood("neutral");
     setMoodSummary("");
     setShowSummary(false);
-    setCurrentPersona({ name: "MoodBot", emoji: "🤖" });
+    setCurrentPersona({ name: "Anima", emoji: "🤖" });
   };
 
   const getMoodSummary = async () => {
@@ -205,7 +205,7 @@ export default function App() {
         <div className="sidebar-header">
           <div className="logo">
             <span className="logo-icon">◈</span>
-            <span className="logo-text">MoodBot</span>
+            <span className="logo-text">Anima</span>
           </div>
           <button className="icon-btn" onClick={() => setSidebarOpen(o => !o)}>
             {sidebarOpen ? "←" : "→"}
@@ -300,7 +300,7 @@ export default function App() {
                 <div className="ap-name">{currentPersona.name}</div>
                 <div className="ap-status">
                   <span className="status-dot on" />
-                  <span>Online · Groq LLaMA3</span>
+                  <span>Online</span>
                 </div>
               </div>
             </div>
@@ -317,7 +317,7 @@ export default function App() {
           {messages.length === 0 && (
             <div className="welcome">
               <div className="welcome-icon">◈</div>
-              <h2>Hey, I'm MoodBot</h2>
+              <h2>Hey, I'm Anima</h2>
               <p>Your AI companion that listens, understands your mood, and adapts to what you need. Just start talking.</p>
               <div className="welcome-chips">
                 {["I'm feeling stressed today", "I need some motivation", "Just had a great day!", "I'm feeling anxious"].map(s => (

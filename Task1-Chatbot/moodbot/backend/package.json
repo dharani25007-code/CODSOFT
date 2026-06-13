@@ -1,7 +1,7 @@
 {
-  "name": "moodbot-backend",
+  "name": "anima-backend",
   "version": "1.0.0",
-  "description": "MoodBot — Adaptive Emotional Resonance Engine backend",
+  "description": "Anima — Adaptive Emotional Resonance Engine backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

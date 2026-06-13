@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=200&section=header&text=MoodBot&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Adaptive%20Emotional%20Resonance%20Engine%20%7C%20CodSoft%20AI%20Internship%20Task%201&descAlignY=60&descAlign=50" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7c6fff&height=200&section=header&text=Anima&fontSize=80&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Adaptive%20Emotional%20Resonance%20Engine%20%7C%20CodSoft%20AI%20Internship%20Task%201&descAlignY=60&descAlign=50" width="100%"/>
 
 <br/>
 
@@ -16,7 +16,9 @@
 
 <br/>
 
-> **MoodBot** is an AI-powered mental health companion that goes far beyond a rule-based chatbot. It detects your emotional state in real time, tracks your mood journey across the entire conversation, auto-switches its personality to match what you need, replies in your language, and speaks back to you — all powered by **Groq LLaMA3.3-70B**, completely free.
+> **Anima** is an AI-powered mental health companion that goes far beyond a rule-based chatbot. It detects your emotional state in real time, tracks your mood journey across the entire conversation, auto-switches its personality to match what you need, replies in your language, and speaks back to you — all powered by **Groq LLaMA3.3-70B**, completely free.
+> 
+> *The name **Anima** (Latin for **soul**, **breath**, or **inner self**) was chosen to reflect the companion's ability to tune into your emotional core, bringing warmth and lifelike resonance to every conversation.*
 
 <br/>
 
@@ -81,9 +83,9 @@
 
 > ### Adaptive Emotional Resonance Engine
 
-Traditional chatbots respond to **keywords**. MoodBot responds to **emotions**.
+Traditional chatbots respond to **keywords**. Anima responds to **emotions**.
 
-| Feature | Traditional Chatbot | MoodBot |
+| Feature | Traditional Chatbot | Anima |
 |---|---|---|
 | Input understanding | Keyword matching | Emotion detection |
 | Personality | Fixed | Dynamically adapts |
@@ -209,7 +211,7 @@ Task1-Chatbot/
 
 ## 🎭 Mood Detection
 
-MoodBot detects 6 emotional states from text + emojis:
+Anima detects 6 emotional states from text + emojis:
 
 | Mood | Color | Trigger words / emojis |
 |---|---|---|
@@ -224,7 +226,7 @@ MoodBot detects 6 emotional states from text + emojis:
 
 ## 🌍 Language Support
 
-MoodBot auto-detects and replies in:
+Anima auto-detects and replies in:
 
 | Language | Detection | Script |
 |---|---|---|
@@ -234,7 +236,7 @@ MoodBot auto-detects and replies in:
 
 **Example:**
 - You type: `நான் மிகவும் சோர்வாக இருக்கிறேன்`
-- MoodBot replies in Tamil automatically ✅
+- Anima replies in Tamil automatically ✅
 
 ---
 
