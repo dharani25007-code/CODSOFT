@@ -4,7 +4,7 @@
 
 <br/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&duration=3000&pause=1000&color=6C63FF&center=true&vCenter=true&multiline=true&repeat=true&width=700&height=80&lines=Groq+LLaMA3+as+AI+opponent;3%C3%973+%7C+4%C3%974+%7C+5%C3%975+%7C+6%C3%976+Grid+Sizes;Strategic+%7C+Aggressive+%7C+Defensive+%7C+Chaotic+AI)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=20&duration=3000&pause=1000&color=6C63FF&center=true&vCenter=true&multiline=true&repeat=true&width=700&height=80&lines=Groq+LLaMA3.1+as+AI+opponent;3%C3%973+%7C+4%C3%974+%7C+5%C3%975+%7C+6%C3%976+Grid+Sizes;Strategic+%7C+Aggressive+%7C+Defensive+%7C+Chaotic+AI)](https://git.io/typing-svg)
 
 <br/>
 
@@ -12,13 +12,13 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-4-000000?style=for-the-badge&logo=express&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-LLaMA3--8B-FF6B35?style=for-the-badge&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq-LLaMA3.1--8B-FF6B35?style=for-the-badge&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
 
 <br/>
 
-> A full-stack Tic-Tac-Toe game where the AI opponent is powered by **Groq LLaMA3-8B** — it reads the board, reasons about the best move, and explains its strategy in plain English. Features 4 grid sizes, 4 difficulty levels, 4 AI personalities, move timer, match mode, and sound effects.
+> A full-stack Tic-Tac-Toe game where the AI opponent is powered by **Groq LLaMA3.1-8B** — it reads the board, reasons about the best move, and explains its strategy in plain English. Features 4 grid sizes, 4 difficulty levels, 4 AI personalities, move timer, match mode, and sound effects.
 
 <br/>
 
@@ -33,7 +33,7 @@
 <td width="50%">
 
 ### 🤖 AI Engine
-- **Groq LLaMA3-8B** as the AI brain
+- **Groq LLaMA3.1-8B** as the AI brain
 - AI explains every move in plain English
 - **Minimax + Alpha-Beta Pruning** fallback
 - Groq runs silently — no toggle exposed to user
@@ -157,7 +157,7 @@ npm install
 
 # Create .env file
 echo GROQ_API_KEY=your_key_here > .env
-echo GROQ_MODEL=llama3-8b-8192 >> .env
+echo GROQ_MODEL=llama-3.1-8b-instant >> .env
 echo PORT=5000 >> .env
 
 node server.js
@@ -190,7 +190,7 @@ npm run dev
 |---|---|---|
 | **Frontend** | React 18 + Vite 5 | Game UI + state management |
 | **Backend** | Node.js + Express 4 | REST API server |
-| **AI Model** | Groq LLaMA3-8B | AI move reasoning |
+| **AI Model** | Groq LLaMA3.1-8B | AI move reasoning |
 | **Fallback** | Minimax + Alpha-Beta | Unbeatable 3×3 AI |
 | **Styling** | Pure CSS | Custom dark design system |
 | **Audio** | Web Audio API | Sound effects — zero cost |
@@ -203,7 +203,7 @@ npm run dev
 
 Two AI engines work together:
 
-**1. Groq LLaMA3** — sends board state as structured prompt → parses JSON response for move + reasoning. Used for larger grids (4×4, 5×5, 6×6) and personality-based play.
+**1. Groq LLaMA3.1** — sends board state as structured prompt → parses JSON response for move + reasoning. Used for larger grids (4×4, 5×5, 6×6) and personality-based play.
 
 **2. Minimax + Alpha-Beta Pruning** — classic recursive game tree search. Evaluates every possible outcome. Used for unbeatable 3×3 mode. Pruning reduces complexity from O(b^d) to near O(b^(d/2)).
 
@@ -221,7 +221,7 @@ flowchart TB
   F --> G[Personality layer\nStrategic / Aggressive / Defensive / Chaotic]
   G --> H{Board size}
   H -- 3x3 --> I[Minimax + Alpha-Beta\noptimal search]
-  H -- 4x4 to 6x6 --> J[Groq LLaMA3-8B\nmove reasoning prompt]
+  H -- 4x4 to 6x6 --> J[Groq LLaMA3.1-8B\nmove reasoning prompt]
   I --> K[AI move + reasoning]
   J --> K
   K --> L[UI feedback\nsound effect + move log + winner modal]

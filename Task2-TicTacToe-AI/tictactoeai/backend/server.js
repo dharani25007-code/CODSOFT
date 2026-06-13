@@ -146,7 +146,7 @@ app.post("/api/ai-move", async (req, res) => {
     return res.json({ move, reasoning: "Minimax: optimal move calculated.", source: "minimax" });
   }
 
-  // Groq LLaMA3 for hard/unbeatable on larger boards
+  // Groq LLaMA3.1 for hard/unbeatable on larger boards
   try {
     const rows = [];
     for (let r = 0; r < size; r++) {

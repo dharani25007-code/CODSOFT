@@ -1,7 +1,7 @@
 {
   "name": "tictactoe-groq-backend",
   "version": "1.0.0",
-  "description": "Tic-Tac-Toe AI backend powered by Groq LLaMA3",
+  "description": "Tic-Tac-Toe AI backend powered by Groq LLaMA3.1",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

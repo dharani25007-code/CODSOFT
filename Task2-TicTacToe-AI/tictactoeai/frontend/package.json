@@ -1,7 +1,7 @@
 {
   "name": "tictactoe-groq-frontend",
   "version": "1.0.0",
-  "description": "Tic-Tac-Toe AI Frontend powered by Groq LLaMA3",
+  "description": "Tic-Tac-Toe AI Frontend powered by Groq LLaMA3.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
