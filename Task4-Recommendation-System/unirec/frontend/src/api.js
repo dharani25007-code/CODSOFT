@@ -1,4 +1,4 @@
-const BASE = "https://unirec-4gvr.onrender.com/api";
+const BASE = "/api";
 
 async function req(method, path, body) {
   const res = await fetch(BASE + path, {

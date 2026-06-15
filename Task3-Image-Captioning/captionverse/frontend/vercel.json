@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://captionverse-mpb3.onrender.com/api/$1"
+    }
+  ]
+}
