@@ -12,7 +12,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "unirec_secret_2026")
-CORS(app, supports_credentials=True, origins=["http://localhost:3002"])
+CORS(app, supports_credentials=True, origins=["*"])
 bcrypt = Bcrypt(app)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -606,4 +606,4 @@ if __name__ == "__main__":
     print(f"\n🌍 UniRec Backend → http://localhost:{port}")
     print(f"   Model  : {GROQ_MODEL}")
     print(f"   DB     : {DB_PATH}\n")
-    app.run(debug=True, port=port, threaded=True)
+    app.run(host="0.0.0.0", debug=False, port=port, threaded=True)
