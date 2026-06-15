@@ -14,6 +14,8 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "unirec_secret_2026")
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["PERMANENT_SESSION_LIFETIME"] = 86400
 CORS(app, supports_credentials=True, origins=["*"])
 bcrypt = Bcrypt(app)
 
