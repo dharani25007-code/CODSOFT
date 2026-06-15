@@ -32,13 +32,13 @@ div align="center">
 
 <div align="center">
 
-| # | Task | Tech | Status |
-|---|---|---|---|
-| 1 | **MoodBot** — Adaptive Emotional Resonance Chatbot | React + Node.js + Groq | ✅ Completed |
-| 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed |
-| 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed |
-| 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed |
-| 5 | **FaceVerse** — Haar + DNN Face Detection & Recognition | Python + Flask + OpenCV + Groq | ✅ Completed |
+| # | Task | Tech | Status | Live Link |
+|---|---|---|---|---|
+| 1 | **MoodBot (Anima)** — Adaptive Emotional Resonance Chatbot | React + Node.js + Groq | ✅ Completed | [Live Demo](https://anima-henna.vercel.app) |
+| 2 | **Tic-Tac-Toe AI** — Groq LLaMA3 powered game | React + Node.js + Groq | ✅ Completed | [Live Demo](https://tictactoe-ai-two.vercel.app) |
+| 3 | **CaptionVerse** — VGG16/ResNet50 + Transformer captioning | Python + Flask + PyTorch + Groq | ✅ Completed | *Not Deployed* |
+| 4 | **UniRec** — Universal AI Recommendation Engine | React + Python + Flask + Groq | ✅ Completed | [Live Demo](https://unirec-five.vercel.app) |
+| 5 | **FaceVerse** — Haar + DNN Face Detection & Recognition | Python + Flask + OpenCV + Groq | ✅ Completed | [Live Demo](https://faceverse-nu.vercel.app) |
 
 </div>
 
