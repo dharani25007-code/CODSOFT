@@ -13,6 +13,7 @@
 ![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://faceverse-nu.vercel.app)
 
 <br/>
 
