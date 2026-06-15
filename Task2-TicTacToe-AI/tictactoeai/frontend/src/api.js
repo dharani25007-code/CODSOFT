@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE = "https://tictactoeai-vynh.onrender.com";
 
 export async function fetchAIMove(board, aiMark, humanMark, size=3, difficulty="unbeatable", personality="strategic") {
   const res = await fetch(`${BASE}/api/ai-move`, {
