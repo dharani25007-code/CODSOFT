@@ -114,7 +114,7 @@ export default function CaptionApp() {
       const formData = new FormData();
       formData.append("image", image);
 
-      const response = await fetch("/api/caption", {
+      const response = await fetch("https://captionverse-d6qr.onrender.com/api/caption", {
         method: "POST",
         body: formData,
       });
