@@ -121,7 +121,7 @@ export default function App() {
       .map(m => ({ role: m.role, content: m.content }));
 
     try {
-      const res = await fetch(`${API}/api/chat`, {
+      const res = await fetch(`${BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: msg, history, personalityId: personality, sessionMoods: allMoods }),
@@ -184,7 +184,7 @@ export default function App() {
 
   const getMoodSummary = async () => {
     if (!messages.length) return;
-    const res = await fetch(`${API}/api/mood-summary`, {
+    const res = await fetch(`${BASE}/api/mood-summary`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ history: messages.filter(m=>m.role!=="system"), allMoods }),
