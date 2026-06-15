@@ -16,7 +16,10 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["PERMANENT_SESSION_LIFETIME"] = 86400
-CORS(app, supports_credentials=True, origins=["*"])
+CORS(app, supports_credentials=True, origins=[
+    "http://localhost:3002",
+    "https://unirec-five.vercel.app"
+])
 bcrypt = Bcrypt(app)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
