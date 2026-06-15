@@ -12,6 +12,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "unirec_secret_2026")
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
 CORS(app, supports_credentials=True, origins=["*"])
 bcrypt = Bcrypt(app)
 
