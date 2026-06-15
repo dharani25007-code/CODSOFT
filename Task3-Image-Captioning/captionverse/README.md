@@ -9,13 +9,14 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
-![Groq](https://img.shields.io/badge/Groq-LLaMA3.3--70B-FF6B35?style=for-the-badge&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![Transformers](https://img.shields.io/badge/HuggingFace-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 ![Status](https://img.shields.io/badge/Status-Completed-22c55e?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
 
 <br/>
 
-> **CaptionVerse** is an AI-powered Visual Intelligence Engine that detects emotions, writes stories, identifies objects, generates hashtags, and translates captions into multiple languages — powered by a mix of PyTorch vision models and text decoders (BLIP / Flan-T5 by default). It integrates with Groq where configured.
+> **CaptionVerse** is an AI-powered Visual Intelligence Engine that detects emotions, writes stories, identifies objects, generates hashtags, and translates captions into multiple languages — powered entirely by a mix of local PyTorch vision models (ResNet50 / BLIP) and text decoders (Flan-T5).
 
 </div>
 
@@ -100,7 +101,7 @@ flowchart TB
 	C --> C2[BLIP / VGG16\ncaption-friendly visual features]
 	C1 --> D[Feature fusion]
 	C2 --> D
-	D --> E[Caption decoder\nFlan-T5 or Groq text model]
+	D --> E[Caption decoder\nFlan-T5 transformer model]
 	E --> F[Analysis heads\nemotion / scene / objects / style]
 	F --> G[Post-processing\nhashtags + SEO + translation]
 	G --> H[Final output\ncaption + story + analytics]
@@ -161,10 +162,10 @@ npm install
 npm run dev       # http://localhost:3003
 ```
 
-Add your Groq API key to `backend/.env`:
+Set up your `backend/.env` (optional model overrides):
 ```env
-GROQ_API_KEY=your_key_here
-GROQ_VISION_MODEL=meta-llama/llama-3.3-70b
+CAPTION_DECODER_MODEL=google/flan-t5-small
+VISION_CAPTION_MODEL=Salesforce/blip-image-captioning-base
 PORT=5003
 ```
 
@@ -178,8 +179,8 @@ PORT=5003
 |---|---|---|
 | **Frontend** | React 18 + Vite 5 | Split-screen UI |
 | **Backend** | Python 3.10 + Flask | REST API |
-| **Vision AI** | Groq LLaMA3.3-70B | Image understanding |
-| **Text AI** | Groq LLaMA3.3-70B | Translation + restyling |
+| **Vision AI** | PyTorch + ResNet50 / BLIP | Image understanding |
+| **Text AI** | Transformers + Flan-T5 | Translation + restyling |
 | **Image processing** | Pillow | Resize + compress |
 | **Styling** | Pure CSS | Dark design system |
 

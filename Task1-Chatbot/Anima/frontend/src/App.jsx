@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
-const API = "http://localhost:5001";
+const BASE = "https://anima-backend-u86s.onrender.com";
 
 const PERSONALITIES = [
   { id: "auto",      emoji: "🤖", label: "Auto",        desc: "AI picks best for your mood" },

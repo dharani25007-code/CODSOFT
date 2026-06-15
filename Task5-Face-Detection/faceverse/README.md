@@ -16,7 +16,7 @@
 
 <br/>
 
-> **FaceVerse** is a Facial Intelligence Engine that goes far beyond basic face detection. It uses **Haar Cascades + DNN deep learning detectors**, analyzes emotions, estimates age & gender, performs crowd analysis, and maintains a face registry — all powered by **OpenCV + Groq LLaMA3.3**.
+> **FaceVerse** is a Facial Intelligence Engine that goes far beyond basic face detection. It uses **Haar Cascades + DNN deep learning detectors**, analyzes emotions, estimates age & gender, performs crowd analysis, and maintains a face registry — all powered by **OpenCV, Local Caffe Nets + Groq LLaMA3.3**.
 
 <br/>
 
@@ -284,7 +284,8 @@ npm run dev
 | **Backend** | Python 3.10 + Flask | REST API server |
 | **Detector 1** | Haar Cascade (OpenCV) | Classic fast face detection |
 | **Detector 2** | DNN SSD ResNet (OpenCV) | Deep learning face detection |
-| **Emotion AI** | Groq LLaMA3.3-70B | Emotion + age + gender analysis |
+| **Age/Gender** | Caffe Deep Neural Nets | Local Age/Gender prediction |
+| **Emotion AI** | Groq LLaMA3.3-70B | Emotion analysis & narrative |
 | **Database** | SQLite | Face registry + detection log |
 | **Styling** | Pure CSS | Dark teal design system |
 

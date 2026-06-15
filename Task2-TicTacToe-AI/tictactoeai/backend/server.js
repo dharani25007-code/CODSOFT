@@ -124,6 +124,46 @@ app.get("/health", (req, res) => {
   res.json({ status: "ok", model: process.env.GROQ_MODEL });
 });
 
+async function getGroqExplanation(board, size, move, aiMark, humanMark, personality, difficulty) {
+  try {
+    const empty = board.map((v,i)=>i).filter(i=>!board[i]);
+    const rows = [];
+    for (let r = 0; r < size; r++) {
+      rows.push(board.slice(r*size, r*size+size).map((v,i)=>v||(r*size+i)).join(" | "));
+    }
+    const boardDisplay = rows.join("\n" + "-".repeat(size*4) + "\n");
+    const personalityNote = PERSONALITY_PROMPTS[personality] || PERSONALITY_PROMPTS.strategic;
+
+    const prompt = `You are a Tic-Tac-Toe AI on a ${size}x${size} board playing as '${aiMark}'.
+Personality: ${personalityNote}
+Difficulty level of this match: ${difficulty}
+
+Board State:
+${boardDisplay}
+
+The AI has strategically chosen to play at empty cell index ${move}.
+Explain in plain English why this move (index ${move}) was chosen, in accordance with your personality (${personality}) and the board state.
+Keep it to one single, short, witty sentence. Do NOT mention coordinates/indices or JSON format in the explanation itself. Keep the explanation natural, explaining the board position (like 'center', 'corner', 'edge', 'blocking you', or 'securing a row/diagonal').
+
+Respond ONLY in this JSON format:
+{"reasoning": "<your single short sentence explanation>"}`;
+
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL,
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 100,
+      temperature: personality === "chaotic" ? 0.8 : 0.2,
+    });
+
+    const text = completion.choices[0]?.message?.content?.trim() || "";
+    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+    return parsed.reasoning || "";
+  } catch (err) {
+    console.error("Groq explanation generation failed:", err.message);
+    return "";
+  }
+}
+
 app.post("/api/ai-move", async (req, res) => {
   const { board, aiMark, humanMark, size = 3, difficulty = "unbeatable", personality = "strategic" } = req.body;
 
@@ -134,28 +174,33 @@ app.post("/api/ai-move", async (req, res) => {
   const empty = board.map((v,i)=>i).filter(i=>!board[i]);
   if (empty.length === 0) return res.status(400).json({ error: "Board is full" });
 
+  let move;
+  let source;
+  let defaultReasoning = "";
+
   // Easy/Medium use heuristic (fast)
   if (difficulty === "easy" || difficulty === "medium") {
-    const move = getHeuristicMove([...board], aiMark, humanMark, size, difficulty);
-    return res.json({ move, reasoning: difficulty === "easy" ? "Playing casually..." : "Thinking a little...", source: "heuristic" });
+    move = getHeuristicMove([...board], aiMark, humanMark, size, difficulty);
+    source = "heuristic";
+    defaultReasoning = difficulty === "easy" ? "Playing casually..." : "Thinking a little...";
   }
-
   // Hard/Unbeatable on 3x3 — use Minimax
-  if (size === 3 && difficulty === "unbeatable") {
-    const move = getBestMinimax([...board], aiMark, humanMark, size);
-    return res.json({ move, reasoning: "Minimax: optimal move calculated.", source: "minimax" });
+  else if (size === 3 && difficulty === "unbeatable") {
+    move = getBestMinimax([...board], aiMark, humanMark, size);
+    source = "minimax";
+    defaultReasoning = "Minimax: optimal move calculated.";
   }
+  else {
+    // Groq LLaMA3.1 for hard/unbeatable on larger boards
+    try {
+      const rows = [];
+      for (let r = 0; r < size; r++) {
+        rows.push(board.slice(r*size, r*size+size).map((v,i)=>v||(r*size+i)).join(" | "));
+      }
+      const boardDisplay = rows.join("\n" + "-".repeat(size*4) + "\n");
+      const personalityNote = PERSONALITY_PROMPTS[personality] || PERSONALITY_PROMPTS.strategic;
 
-  // Groq LLaMA3.1 for hard/unbeatable on larger boards
-  try {
-    const rows = [];
-    for (let r = 0; r < size; r++) {
-      rows.push(board.slice(r*size, r*size+size).map((v,i)=>v||(r*size+i)).join(" | "));
-    }
-    const boardDisplay = rows.join("\n" + "-".repeat(size*4) + "\n");
-    const personalityNote = PERSONALITY_PROMPTS[personality] || PERSONALITY_PROMPTS.strategic;
-
-    const prompt = `You are a Tic-Tac-Toe AI on a ${size}x${size} board playing as '${aiMark}'.
+      const prompt = `You are a Tic-Tac-Toe AI on a ${size}x${size} board playing as '${aiMark}'.
 Personality: ${personalityNote}
 Difficulty: ${difficulty}
 
@@ -175,26 +220,41 @@ Rules:
 Respond ONLY in this JSON:
 {"move": <index>, "reasoning": "<one short sentence>"}`;
 
-    const completion = await groq.chat.completions.create({
-      model: process.env.GROQ_MODEL,
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 120,
-      temperature: personality === "chaotic" ? 0.8 : 0.1,
-    });
+      const completion = await groq.chat.completions.create({
+        model: process.env.GROQ_MODEL,
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 120,
+        temperature: personality === "chaotic" ? 0.8 : 0.1,
+      });
 
-    const text = completion.choices[0]?.message?.content?.trim() || "";
-    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-    const move = parseInt(parsed.move);
+      const text = completion.choices[0]?.message?.content?.trim() || "";
+      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+      const chosenMove = parseInt(parsed.move);
 
-    if (!isNaN(move) && empty.includes(move)) {
-      return res.json({ move, reasoning: parsed.reasoning, source: "groq-llama3" });
+      if (!isNaN(chosenMove) && empty.includes(chosenMove)) {
+        return res.json({ move: chosenMove, reasoning: parsed.reasoning, source: "groq-llama3" });
+      }
+      throw new Error("Invalid Groq move");
+    } catch (err) {
+      console.error("Groq error, heuristic fallback:", err.message);
+      move = getHeuristicMove([...board], aiMark, humanMark, size, "hard");
+      source = "heuristic-fallback";
+      defaultReasoning = "Heuristic fallback.";
     }
-    throw new Error("Invalid Groq move");
-  } catch (err) {
-    console.error("Groq error, heuristic fallback:", err.message);
-    const move = getHeuristicMove([...board], aiMark, humanMark, size, "hard");
-    return res.json({ move, reasoning: "Heuristic fallback.", source: "heuristic-fallback" });
   }
+
+  // If we reach here, we selected the move locally (via Minimax, Heuristics, or Fallback).
+  // Let's generate a plain English reasoning via Groq for this chosen move!
+  let reasoning = "";
+  if (process.env.GROQ_API_KEY) {
+    reasoning = await getGroqExplanation(board, size, move, aiMark, humanMark, personality, difficulty);
+  }
+  
+  if (!reasoning) {
+    reasoning = defaultReasoning;
+  }
+
+  return res.json({ move, reasoning, source });
 });
 
 app.post("/api/game-state", (req, res) => {

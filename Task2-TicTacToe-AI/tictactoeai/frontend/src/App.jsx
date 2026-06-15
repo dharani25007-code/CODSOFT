@@ -396,7 +396,7 @@ export default function App() {
                   onClick={() => handleCellClick(i)}
                   disabled={!canClick}
                   aria-label={val?`${val} at ${i+1}`:`Empty ${i+1}`}>
-                  {val}
+                  {val && <span>{val}</span>}
                 </button>
               );
             })}
