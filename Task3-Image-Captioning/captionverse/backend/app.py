@@ -5,27 +5,59 @@ import re
 from collections import Counter
 from functools import lru_cache
 
-import torch
-import torch.nn as nn
 import time
 import logging
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from PIL import Image
+from groq import Groq
+
+# Try importing torch
 try:
-    from torchvision.models import ResNet50_Weights, resnet50
-    TORCHVISION_AVAILABLE = True
+    import torch
+    import torch.nn as nn
+    TORCH_AVAILABLE = True
 except Exception as e:
-    ResNet50_Weights = None
-    resnet50 = None
-    TORCHVISION_AVAILABLE = False
-    # delay logging setup until after logger configured
-    print(f"Warning: torchvision import failed: {e}")
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from transformers import BlipProcessor, BlipForConditionalGeneration
+    torch = None
+    nn = None
+    TORCH_AVAILABLE = False
+    print(f"Warning: torch import failed: {e}")
+
+# Try importing torchvision
+TORCHVISION_AVAILABLE = False
+ResNet50_Weights = None
+resnet50 = None
+if TORCH_AVAILABLE:
+    try:
+        from torchvision.models import ResNet50_Weights, resnet50
+        if ResNet50_Weights is not None and resnet50 is not None:
+            TORCHVISION_AVAILABLE = True
+    except Exception as e:
+        print(f"Warning: torchvision import failed: {e}")
+
+# Try importing transformers
+try:
+    from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+    from transformers import BlipProcessor, BlipForConditionalGeneration
+    TRANSFORMERS_AVAILABLE = True
+except Exception as e:
+    AutoModelForSeq2SeqLM = None
+    AutoTokenizer = None
+    BlipProcessor = None
+    BlipForConditionalGeneration = None
+    TRANSFORMERS_AVAILABLE = False
+    print(f"Warning: transformers import failed: {e}")
 
 load_dotenv()
+
+groq_client = None
+if os.getenv("GROQ_API_KEY"):
+    try:
+        groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    except Exception as e:
+        print(f"Warning: Failed to initialize Groq client: {e}")
+
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
@@ -80,7 +112,11 @@ SCENE_TYPES = [
 CAPTION_DECODER_MODEL = os.getenv("CAPTION_DECODER_MODEL", "google/flan-t5-small")
 VISION_CAPTION_MODEL = os.getenv("VISION_CAPTION_MODEL", "Salesforce/blip-image-captioning-large")
 VISION_CAPTION_MODEL_FALLBACK = os.getenv("VISION_CAPTION_MODEL_FALLBACK", "Salesforce/blip-image-captioning-base")
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+DEVICE = None
+if TORCH_AVAILABLE:
+    DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 FAST_MODE = str(os.getenv("FAST_MODE", "false")).lower() in ("1", "true", "yes")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -157,6 +193,10 @@ def style_instruction(style):
 @lru_cache(maxsize=1)
 def load_models():
     start = time.time()
+    if not TORCH_AVAILABLE or not TRANSFORMERS_AVAILABLE:
+        logging.warning("Local PyTorch/Transformers models are not available. Running in API/Heuristic mode.")
+        return {"use_blip": False}
+
     if TORCHVISION_AVAILABLE:
         weights = ResNet50_Weights.DEFAULT
         encoder = resnet50(weights=weights)
@@ -218,6 +258,19 @@ def process_image(file):
 
 def get_visual_features(image):
     start = time.time()
+    if not TORCH_AVAILABLE or not TRANSFORMERS_AVAILABLE:
+        color_mood = analyze_color_mood(image)
+        logging.info("get_visual_features (fallback): torch/transformers not available.")
+        return {
+            "objects": [{"name": "image", "confidence": 50}],
+            "top_label": "image",
+            "top_score": 50,
+            "feature_norm": 0.0,
+            "keywords": ["image"],
+            "visual_caption": f"A scene with colors that feel {color_mood}.",
+            "silhouette_like": False,
+        }
+
     models = load_models()
     silhouette_like = detect_silhouette_like(image)
 
@@ -386,6 +439,23 @@ def infer_emotion(scene_type, color_mood, top_label):
 
 
 def generate_text(prompt, max_new_tokens=96):
+    if groq_client:
+        try:
+            start = time.time()
+            response = groq_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=max_new_tokens,
+                temperature=0.7,
+            )
+            result = response.choices[0].message.content.strip()
+            logging.info(f"generate_text (groq): len={len(result)} time={(time.time()-start):.2f}s")
+            return clean_caption(result)
+        except Exception as e:
+            logging.warning(f"Groq API call failed: {e}; falling back to local model.")
+
     start = time.time()
     models = load_models()
     inputs = models["tokenizer"](
@@ -486,8 +556,9 @@ def build_analysis_prompt(primary_caption, label_text, style, language_name, sce
 Use the caption and detected visual concepts to return valid JSON only.
 
 Rules:
-- caption_alt: a different caption in the same language as the main caption.
-- story: exactly 3 sentences inspired by the image.
+- caption: rewrite the main caption to match the style instruction: {style_instruction(style)}. Write in {language_name}.
+- caption_alt: a different caption in the same language as the main caption, also matching the style instruction.
+- story: exactly 3 sentences inspired by the image, written in {language_name}.
 - hashtags: exactly 12 short tags without the # symbol.
 - seo_tags: exactly 8 short SEO keywords.
 - scene_type: one of {", ".join(SCENE_TYPES)}.
@@ -502,7 +573,7 @@ Requested language: {language_name}
 Scene type hint: {scene_type}
 Color mood hint: {color_mood}
 
-Return JSON with keys caption_alt, story, hashtags, seo_tags, scene_type, emotion, emotion_score, color_mood, confidence.
+Return JSON with keys caption, caption_alt, story, hashtags, seo_tags, scene_type, emotion, emotion_score, color_mood, confidence.
 """
 
 
@@ -520,26 +591,64 @@ Return only the caption.
 
 
 def build_translation_prompt(caption, language_name):
-    return f"""Translate this image caption to {language_name}. Keep the same tone and style.
+    if groq_client:
+        return f"""Translate this image caption to {language_name}. Keep the same tone and style.
 Caption: {caption}
 Return only the translated caption.
 """
+    else:
+        return f"translate to {language_name}: {caption}"
 
 
 def build_restyle_prompt(caption, style, language_name):
-    return f"""Rewrite this image caption in a new style.
+    if groq_client:
+        return f"""Rewrite this image caption in a new style.
 Original caption: {caption}
 New style instruction: {style_instruction(style)}
 Write in {language_name}.
 Return only the new caption.
 """
+    else:
+        style_word = style.lower()
+        if style_word == "professional":
+            style_word = "formal"
+        elif style_word == "social":
+            style_word = "social media"
+        return f"rewrite to be {style_word} in {language_name}: {caption}"
+
+
+def get_groq_analysis(caption, label_text, style, language_name, scene_type, color_mood):
+    if not groq_client:
+        return None
+    try:
+        prompt = build_analysis_prompt(caption, label_text, style, language_name, scene_type, color_mood)
+        response = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            response_format={"type": "json_object"},
+            temperature=0.7,
+        )
+        content = response.choices[0].message.content.strip()
+        parsed = safe_json_parse(content)
+        if parsed:
+            logging.info("Successfully fetched analysis from Groq")
+            return parsed
+    except Exception as e:
+        logging.warning(f"Failed to get Groq analysis: {e}")
+    return None
 
 
 def build_response_payload(image, style, language):
-    if not globals().get("MODELS_READY", False):
+    if not groq_client and not globals().get("MODELS_READY", False):
         # Models not ready yet — caller should retry later
         raise RuntimeError("models_not_ready")
-    models = load_models()
+    if TORCH_AVAILABLE and TRANSFORMERS_AVAILABLE:
+        try:
+            models = load_models()
+        except Exception:
+            pass
     features = get_visual_features(image)
     color_mood = analyze_color_mood(image)
     scene_type = infer_scene_type(features["keywords"])
@@ -559,17 +668,32 @@ def build_response_payload(image, style, language):
         color_mood = "monochrome"
         emotion, emotion_score, emotion_emoji = infer_emotion(scene_type, color_mood, features["top_label"])
 
-    extras = {
-        "caption_alt": fallback_caption_alt(caption, style),
-        "story": fallback_story(caption, scene_type, color_mood),
-        "hashtags": fallback_hashtags(caption, features["keywords"], scene_type),
-        "seo_tags": fallback_seo_tags(caption, features["keywords"], scene_type, color_mood),
-        "scene_type": scene_type,
-        "emotion": emotion,
-        "emotion_score": emotion_score,
-        "color_mood": color_mood,
-        "confidence": max(features["top_score"], emotion_score),
-    }
+    groq_data = get_groq_analysis(caption, label_text, style, language_name, scene_type, color_mood)
+    if groq_data:
+        caption = groq_data.get("caption") or caption
+        extras = {
+            "caption_alt": groq_data.get("caption_alt"),
+            "story": groq_data.get("story"),
+            "hashtags": groq_data.get("hashtags"),
+            "seo_tags": groq_data.get("seo_tags"),
+            "scene_type": groq_data.get("scene_type"),
+            "emotion": groq_data.get("emotion"),
+            "emotion_score": groq_data.get("emotion_score"),
+            "color_mood": groq_data.get("color_mood"),
+            "confidence": groq_data.get("confidence", max(features["top_score"], emotion_score)),
+        }
+    else:
+        extras = {
+            "caption_alt": fallback_caption_alt(caption, style),
+            "story": fallback_story(caption, scene_type, color_mood),
+            "hashtags": fallback_hashtags(caption, features["keywords"], scene_type),
+            "seo_tags": fallback_seo_tags(caption, features["keywords"], scene_type, color_mood),
+            "scene_type": scene_type,
+            "emotion": emotion,
+            "emotion_score": emotion_score,
+            "color_mood": color_mood,
+            "confidence": max(features["top_score"], emotion_score),
+        }
 
     caption_alt = clean_caption(extras.get("caption_alt") or fallback_caption_alt(caption, style))
     story = normalize_whitespace(extras.get("story") or fallback_story(caption, scene_type, color_mood))
@@ -686,7 +810,7 @@ def translate_caption():
         return jsonify({"error": "No caption provided"}), 400
 
     try:
-        if not globals().get("MODELS_READY", False):
+        if not groq_client and not globals().get("MODELS_READY", False):
             return jsonify({"error": "Models are still loading. Please retry in a minute."}), 503
         translated = generate_text(build_translation_prompt(caption, language_name), max_new_tokens=64)
         return jsonify({"translated": translated, "language": language_name})
@@ -706,7 +830,7 @@ def restyle():
         return jsonify({"error": "No caption provided"}), 400
 
     try:
-        if not globals().get("MODELS_READY", False):
+        if not groq_client and not globals().get("MODELS_READY", False):
             return jsonify({"error": "Models are still loading. Please retry in a minute."}), 503
         restyled = generate_text(build_restyle_prompt(caption, style, language_name), max_new_tokens=48)
         return jsonify({"caption": restyled, "style": style})
@@ -718,8 +842,8 @@ def restyle():
 def health():
     return jsonify({
         "status": "ok",
-        "model": f"ResNet50 + {CAPTION_DECODER_MODEL}",
-        "pipeline": "ResNet50 encoder + transformer decoder",
+        "model": f"ResNet50 + {CAPTION_DECODER_MODEL}" if TORCH_AVAILABLE else "API-only (Groq)",
+        "pipeline": "ResNet50 encoder + transformer decoder" if TORCH_AVAILABLE else "Groq API Pipeline",
         "version": "CaptionVerse v3.0",
     })
 
@@ -727,10 +851,15 @@ def health():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5003))
     print(f"\n🖼️  CaptionVerse Backend -> http://localhost:{port}")
-    print(f"   Caption Model : ResNet50 + {CAPTION_DECODER_MODEL}")
-    print(f"   Pipeline      : ResNet50 encoder + transformer decoder\n")
-    # Preload models on startup so the first HTTP request won't block for downloads
-    if not TORCHVISION_AVAILABLE:
+    print(f"   Caption Model : ResNet50 + {CAPTION_DECODER_MODEL}" if TORCH_AVAILABLE else "   Caption Model : API-only (Groq)")
+    print(f"   Pipeline      : ResNet50 encoder + transformer decoder\n" if TORCH_AVAILABLE else "   Pipeline      : Groq API Pipeline\n")
+    
+    if not TORCH_AVAILABLE or not TRANSFORMERS_AVAILABLE:
+        print("\n⚠️  PyTorch or Transformers not available/broken locally.")
+        print("   Running in API-only mode using Groq for captions & analysis.\n")
+        globals()["MODELS_READY"] = False
+        globals()["FAST_MODE"] = True
+    elif not TORCHVISION_AVAILABLE:
         print("torchvision not available or incompatible — attempting BLIP fallback (will preload BLIP models)...")
         try:
             load_models()
