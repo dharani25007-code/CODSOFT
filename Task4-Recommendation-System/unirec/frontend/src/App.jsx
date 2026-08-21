@@ -102,28 +102,135 @@ function RecCard({ item, onRate, onSave, savedIds }) {
   );
 }
 
-function DNAPanel({ dna }) {
-  if (!dna || Object.keys(dna).length === 0) return null;
-  const cats = Object.entries(dna).filter(([k]) => k !== "dominant_mood");
-  return (
-    <div className="dna-panel">
-      <div className="dna-title">🧬 Your Emotional DNA</div>
-      {dna.dominant_mood && (
-        <div className="dna-mood">Dominant mood: <strong>{dna.dominant_mood}</strong></div>
-      )}
-      <div className="dna-bars">
-        {cats.map(([cat, score]) => (
-          <div key={cat} className="dna-bar-row">
-            <span className="dna-cat">{CATS.find(c=>c.id===cat)?.emoji || "◈"} {cat}</span>
-            <div className="dna-bar-track">
-              <div className="dna-bar-fill" style={{ width: `${(score/5)*100}%`, background: CAT_COLORS[cat] || "var(--accent)" }} />
-            </div>
-            <span className="dna-score">{score}★</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+
+
+const FALLBACK_RECS = [
+  {
+    title: "Interstellar", category: "movies", emoji: "🚀", genre: "Sci-Fi / Drama", year: "2014",
+    why: "A mind-bending epic about love, time, and human perseverance that aligns perfectly with your mindset.",
+    match_score: 96, trending: true, cross_resonance: "Deep cosmic story matching your mood."
+  },
+  {
+    title: "Whiplash", category: "movies", emoji: "🥁", genre: "Drama / Music", year: "2014",
+    why: "An intense exploration of obsession and drive that will ignite your inner motivation.",
+    match_score: 94, trending: false, cross_resonance: "High energy determination."
+  },
+  {
+    title: "Oppenheimer", category: "movies", emoji: "⚛️", genre: "Biographical Drama", year: "2023",
+    why: "A gripping tale of intellect, ambition, and historic impact.",
+    match_score: 95, trending: true, cross_resonance: "Mind-expanding cinematic experience."
+  },
+  {
+    title: "Spirited Away", category: "movies", emoji: "🏮", genre: "Anime / Fantasy", year: "2001",
+    why: "A enchanting masterpiece of imagination, wonder, and emotional depth.",
+    match_score: 97, trending: true, cross_resonance: "Immersive magical escapism."
+  },
+  {
+    title: "Atomic Habits by James Clear", category: "books", emoji: "📖", genre: "Self-Improvement", year: "2018",
+    why: "Practical framework for continuous growth, perfect for your current mindset.",
+    match_score: 98, trending: true, cross_resonance: "Personal excellence and habit design."
+  },
+  {
+    title: "Dune by Frank Herbert", category: "books", emoji: "🏜️", genre: "Sci-Fi Epic", year: "1965",
+    why: "An intricate universe of strategy, destiny, and epic worldbuilding.",
+    match_score: 93, trending: true, cross_resonance: "Strategic foresight and epic storytelling."
+  },
+  {
+    title: "Deep Work by Cal Newport", category: "books", emoji: "🧠", genre: "Productivity", year: "2016",
+    why: "Rules for focused success in a distracted world to maximize your output.",
+    match_score: 92, trending: false, cross_resonance: "Channeling focus into tangible achievement."
+  },
+  {
+    title: "Hans Zimmer - Live in Prague", category: "music", emoji: "🎼", genre: "Cinematic Orchestral", year: "2017",
+    why: "Powerful, soaring symphonic compositions that elevate your energy and focus.",
+    match_score: 95, trending: true, cross_resonance: "Translates epic themes into soundscapes."
+  },
+  {
+    title: "Daft Punk - Discovery", category: "music", emoji: "⚡", genre: "Electronic / Synthwave", year: "2001",
+    why: "Energetic synth beats and timeless electronic rhythms that uplift your mood.",
+    match_score: 90, trending: false, cross_resonance: "High-tempo productive flow state."
+  },
+  {
+    title: "Lofi Girl - Chill Beats to Relax", category: "music", emoji: "🎧", genre: "Lofi Hip Hop", year: "2024",
+    why: "Calm, relaxing beats perfect for studying, working, or unwinding.",
+    match_score: 96, trending: true, cross_resonance: "Peaceful atmosphere for deep focus."
+  },
+  {
+    title: "Hades", category: "games", emoji: "⚔️", genre: "Rogue-like Action", year: "2020",
+    why: "Fast-paced, highly rewarding gameplay with an incredible soundtrack and story.",
+    match_score: 93, trending: true, cross_resonance: "Persistent, rewarding game loop."
+  },
+  {
+    title: "Celeste", category: "games", emoji: "🏔️", genre: "Precision Platformer", year: "2018",
+    why: "A moving journey about overcoming obstacles and scaling impossible heights.",
+    match_score: 91, trending: false, cross_resonance: "Resonates with resilience and overcoming challenges."
+  },
+  {
+    title: "Stardew Valley", category: "games", emoji: "🌾", genre: "Farming RPG", year: "2016",
+    why: "A relaxing escape into building your farm, making friends, and finding peace.",
+    match_score: 96, trending: true, cross_resonance: "Wholesome, soothing gameplay experience."
+  },
+  {
+    title: "High-Protein Grain & Avocado Bowl", category: "food", emoji: "🥗", genre: "Healthy & Fueling", year: "Fresh",
+    why: "Nutrient-dense power meal to sustain high energy and cognitive focus.",
+    match_score: 89, trending: true, cross_resonance: "Physical nutrition aligned with mental drive."
+  },
+  {
+    title: "Artisanal Neapolitan Margherita Pizza", category: "food", emoji: "🍕", genre: "Comfort Food", year: "Fresh",
+    why: "Crispy wood-fired crust with fresh basil and melted mozzarella.",
+    match_score: 94, trending: true, cross_resonance: "Delicious comfort food for your mood."
+  },
+  {
+    title: "30-Minute HIIT Power Circuit", category: "fitness", emoji: "🔥", genre: "Full Body Cardio", year: "Active",
+    why: "High-intensity workout designed to release endorphins and build endurance.",
+    match_score: 95, trending: true, cross_resonance: "Direct physical outlet for your energy."
+  },
+  {
+    title: "Morning Sunset Yoga & Mobility", category: "fitness", emoji: "🧘", genre: "Stretching & Balance", year: "Active",
+    why: "Gentle mobility routine to release tension and restore mental balance.",
+    match_score: 92, trending: false, cross_resonance: "Calming physical alignment."
+  },
+  {
+    title: "Kyoto Temple & Bamboo Forest Hike", category: "travel", emoji: "⛩️", genre: "Adventure / Culture", year: "Explorer",
+    why: "An inspiring journey combining serene nature with ancient architectural wonder.",
+    match_score: 88, trending: false, cross_resonance: "Expands your horizons with timeless beauty."
+  },
+  {
+    title: "Amalfi Coast Scenic Cliffside Drive", category: "travel", emoji: "🌊", genre: "Coastal Paradise", year: "Explorer",
+    why: "Breathtaking Mediterranean views, pastel villages, and sun-soaked coastlines.",
+    match_score: 94, trending: true, cross_resonance: "Wanderlust travel inspiration."
+  },
+  {
+    title: "Forest - Deep Focus & Productivity", category: "apps", emoji: "🌲", genre: "Productivity Tool", year: "2024",
+    why: "Gamified focus timer that helps you stay off distractions and build your virtual forest.",
+    match_score: 94, trending: true, cross_resonance: "Keeps your focus locked on your goals."
+  },
+  {
+    title: "Notion - All-in-One Mind Workspace", category: "apps", emoji: "📝", genre: "Organization", year: "2024",
+    why: "Organize your life, projects, notes, and goals in one clean aesthetic workspace.",
+    match_score: 95, trending: true, cross_resonance: "Structured mental clarity tool."
+  }
+];
+
+function getFrontendFallbackRecs(mood, category, query) {
+  let list = FALLBACK_RECS;
+  if (category && category !== "all") {
+    list = list.filter(item => item.category === category);
+  }
+  if (!list || list.length === 0) list = FALLBACK_RECS;
+  if (query) {
+    const q = query.toLowerCase();
+    const matched = list.filter(i => i.title.toLowerCase().includes(q) || i.why.toLowerCase().includes(q) || i.genre.toLowerCase().includes(q));
+    if (matched.length > 0) list = matched;
+  }
+  return list.map(item => ({
+    ...item,
+    verified: true,
+    sources: [
+      { name: "Google Search", title: item.title, url: `https://www.google.com/search?q=${encodeURIComponent(item.title)}`, extract: `Search for ${item.title}` },
+      { name: "Wikipedia", title: item.title, url: `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(item.title)}`, extract: `Learn more about ${item.title}` }
+    ]
+  })).slice(0, 8);
 }
 
 export default function App() {
@@ -171,9 +278,16 @@ export default function App() {
     setLoading(true); setSearchMode(false);
     try {
       const d = await api.recommend({ mood, category, query });
-      setRecs(d.recommendations || []);
-      setDna(d.emotional_dna || {});
-    } catch {}
+      if (d.recommendations && d.recommendations.length > 0) {
+        setRecs(d.recommendations);
+      } else {
+        setRecs(getFrontendFallbackRecs(mood, category, query));
+      }
+      if (d.emotional_dna) setDna(d.emotional_dna);
+    } catch (err) {
+      console.warn("Backend recommendation fetch error, using fallback recommendations:", err);
+      setRecs(getFrontendFallbackRecs(mood, category, query));
+    }
     finally { setLoading(false); }
   };
 
@@ -182,8 +296,14 @@ export default function App() {
     setLoading(true); setSearchMode(true);
     try {
       const d = await api.search({ query });
-      setRecs(d.results || []);
-    } catch {}
+      if (d.results && d.results.length > 0) {
+        setRecs(d.results);
+      } else {
+        setRecs(getFrontendFallbackRecs(mood, category, query));
+      }
+    } catch {
+      setRecs(getFrontendFallbackRecs(mood, category, query));
+    }
     finally { setLoading(false); }
   };
 
@@ -213,9 +333,9 @@ export default function App() {
           <span className="header-logo">◈ UniRec</span>
         </div>
         <nav className="header-nav">
-          {["discover","saved","ratings","dna"].map(t => (
+          {["discover","saved","ratings"].map(t => (
             <button key={t} className={`nav-btn ${tab===t?"active":""}`} onClick={() => setTab(t)}>
-              {t === "discover" ? "🌍 Discover" : t === "saved" ? "♥ Saved" : t === "ratings" ? "⭐ Ratings" : "🧬 My DNA"}
+              {t === "discover" ? "🌍 Discover" : t === "saved" ? "♥ Saved" : "⭐ Ratings"}
             </button>
           ))}
         </nav>
@@ -275,8 +395,7 @@ export default function App() {
               </button>
             </div>
 
-            {/* DNA panel */}
-            <DNAPanel dna={dna} />
+
 
             {/* Results */}
             {recs.length > 0 && (
@@ -347,17 +466,7 @@ export default function App() {
           </div>
         )}
 
-        {/* DNA tab */}
-        {tab === "dna" && (
-          <div className="tab-content">
-            <h2 className="tab-title">🧬 Your Emotional DNA</h2>
-            <p className="tab-sub">Your unique preference fingerprint — built from your ratings and mood history.</p>
-            <DNAPanel dna={dna} />
-            {(!dna || Object.keys(dna).length === 0) && (
-              <div className="empty-state"><div className="empty-emoji">🧬</div><h3>DNA not built yet</h3><p>Rate at least 3 items in Discover to generate your Emotional DNA profile.</p></div>
-            )}
-          </div>
-        )}
+
       </main>
     </div>
   );

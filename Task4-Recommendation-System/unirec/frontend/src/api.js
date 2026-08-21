@@ -7,7 +7,16 @@ async function req(method, path, body) {
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const data = await res.json();
+  
+  const contentType = res.headers.get("content-type");
+  let data;
+  if (contentType && contentType.includes("application/json")) {
+    data = await res.json();
+  } else {
+    const text = await res.text();
+    throw new Error(`Server returned non-JSON response (${res.status}). Backend may be offline or starting up.`);
+  }
+
   if (!res.ok) throw new Error(data.error || "Request failed");
   return data;
 }
